@@ -1,537 +1,671 @@
---- a/document.html+++ b/document.html@@ -31,10 +31,10 @@         font-family: 'Noto Sans KR', sans-serif;
-         background-color: var(--bg-main);
-         color: var(--text-main);
--        line-height: 1.6;
--        max-width: 1200px;
-+        line-height: 1.7;
-+        max-width: 1100px;
-         margin: 0 auto;
--        padding: 40px;
-+        padding: 48px 40px;
-       }
- 
-       h1,
-@@ -47,20 +47,51 @@       /* Header */
-       .header {
-         margin-bottom: 40px;
--        border-bottom: 3px solid var(--accent-primary);
--        padding-bottom: 20px;
-+        padding: 36px 40px;
-+        background: linear-gradient(135deg, #0d2244 0%, #0a1628 100%);
-+        border-left: 5px solid var(--accent-primary);
-+        border-radius: 6px;
-+        position: relative;
-+        overflow: hidden;
-+      }
-+
-+      .header::after {
-+        content: '</ >';
-+        position: absolute;
-+        right: 40px;
-+        top: 50%;
-+        transform: translateY(-50%);
-+        font-size: 5rem;
-+        font-weight: 700;
-+        color: rgba(0, 229, 192, 0.06);
-+        font-family: monospace;
-+        letter-spacing: -4px;
-       }
- 
-       .header h1 {
--        font-size: 2.5rem;
-+        font-size: 2.8rem;
-         font-weight: 700;
--        margin-bottom: 5px;
--      }
--
--      .header h2 {
--        font-size: 1.5rem;
--        color: var(--accent-secondary);
-+        margin-bottom: 6px;
-+        letter-spacing: -0.5px;
-+      }
-+
-+      .header .header-role {
-+        font-size: 1.15rem;
-+        color: var(--accent-primary);
-         font-weight: 400;
-+        letter-spacing: 2px;
-+        text-transform: uppercase;
-+        display: flex;
-+        align-items: center;
-+        gap: 8px;
-+      }
-+
-+      .header .header-role::before {
-+        content: '';
-+        display: inline-block;
-+        width: 24px;
-+        height: 2px;
-+        background: var(--accent-primary);
-       }
- 
-       /* Resume Layout */
-@@ -76,6 +107,8 @@         background-color: var(--bg-sidebar);
-         padding: 30px;
-         border-radius: 8px;
-+        border-top: 3px solid var(--accent-primary);
-+        align-self: flex-start;
-       }
- 
-       .sidebar-section {
-@@ -105,12 +138,18 @@       }
- 
-       .tag {
--        background-color: rgba(0, 229, 192, 0.1);
-+        background-color: rgba(0, 229, 192, 0.08);
-         color: var(--accent-secondary);
--        border: 1px solid var(--accent-secondary);
--        padding: 5px 12px;
-+        border: 1px solid rgba(100, 255, 218, 0.4);
-+        padding: 4px 14px;
-         border-radius: 20px;
--        font-size: 0.9rem;
-+        font-size: 0.82rem;
-+        font-weight: 500;
-+        letter-spacing: 0.5px;
-+        transition: background 0.2s;
-+      }
-+      .tag:hover {
-+        background-color: rgba(0, 229, 192, 0.2);
-       }
- 
-       /* Timeline */
-@@ -162,11 +201,19 @@ 
-       .section-title {
-         color: var(--accent-primary);
--        font-size: 1.5rem;
--        margin-bottom: 25px;
-+        font-size: 1.25rem;
-+        margin-bottom: 28px;
-         display: flex;
-         align-items: center;
--        gap: 10px;
-+        gap: 12px;
-+        letter-spacing: 1px;
-+        text-transform: uppercase;
-+      }
-+      .section-title::after {
-+        content: '';
-+        flex: 1;
-+        height: 1px;
-+        background: rgba(100, 255, 218, 0.2);
-       }
- 
-       .experience-item {
-@@ -176,26 +223,42 @@       .exp-header {
-         display: flex;
-         align-items: center;
--        gap: 15px;
--        margin-bottom: 10px;
-+        gap: 12px;
-+        margin-bottom: 6px;
-+        flex-wrap: wrap;
-       }
- 
-       .exp-header h3 {
--        font-size: 1.3rem;
-+        font-size: 1.2rem;
-+        color: var(--text-light);
-       }
- 
-       .badge {
--        background-color: rgba(100, 255, 218, 0.15);
-+        background-color: rgba(0, 229, 192, 0.12);
-+        color: var(--accent-primary);
-+        padding: 2px 10px;
-+        border-radius: 4px;
-+        font-size: 0.75rem;
-+        font-weight: 700;
-+        border: 1px solid rgba(0, 229, 192, 0.3);
-+        letter-spacing: 0.5px;
-+      }
-+
-+      .badge.intern {
-+        background-color: rgba(255, 200, 100, 0.1);
-+        color: #ffc864;
-+        border-color: rgba(255, 200, 100, 0.3);
-+      }
-+
-+      .exp-project {
-+        display: inline-block;
-+        font-weight: 600;
-+        font-size: 0.92rem;
-         color: var(--accent-secondary);
--        padding: 3px 8px;
-+        background: rgba(100, 255, 218, 0.07);
-+        border: 1px solid rgba(100, 255, 218, 0.2);
-+        padding: 3px 12px;
-         border-radius: 4px;
--        font-size: 0.8rem;
--        font-weight: bold;
--      }
--
--      .exp-project {
--        font-weight: bold;
--        color: var(--text-light);
-         margin: 10px 0;
-       }
- 
-@@ -211,10 +274,11 @@       }
- 
-       .exp-list li::before {
--        content: '-';
-+        content: '▸';
-         position: absolute;
-         left: 0;
-         color: var(--accent-primary);
-+        font-size: 0.85em;
-       }
- 
-       /* Divider */
-@@ -225,43 +289,121 @@       }
- 
-       /* Cover Letter */
--      .cover-letter-section h2 {
--        color: var(--accent-primary);
-+      .cover-letter-section .cl-header {
-+        display: flex;
-+        align-items: center;
-+        justify-content: center;
-+        gap: 16px;
-+        margin-bottom: 40px;
-+      }
-+      .cover-letter-section .cl-header h2 {
-+        color: var(--text-light);
-+        font-size: 1.8rem;
-+      }
-+      .cover-letter-section .cl-header .cl-accent {
-+        color: var(--accent-primary);
-+      }
-+      .cl-subtext {
-         text-align: center;
--        font-size: 2rem;
--        margin-bottom: 40px;
-+        color: rgba(204, 214, 246, 0.5);
-+        font-size: 0.88rem;
-+        margin-top: -30px;
-+        margin-bottom: 36px;
-+        letter-spacing: 0.5px;
-       }
- 
-       .card {
-         background-color: var(--bg-card);
-         border-left: 4px solid var(--accent-primary);
--        padding: 30px;
--        margin-bottom: 30px;
--        border-radius: 4px;
-+        padding: 32px 36px;
-+        margin-bottom: 24px;
-+        border-radius: 0 6px 6px 0;
-         transition:
-           transform 0.2s ease,
-           box-shadow 0.2s ease;
-+        position: relative;
-+      }
-+
-+      .card:nth-child(3) {
-+        border-left-color: #7b8cde;
-+      }
-+      .card:nth-child(4) {
-+        border-left-color: #6fc3df;
-+      }
-+      .card:nth-child(5) {
-+        border-left-color: #64ffda;
-       }
- 
-       .card:hover {
--        transform: translateY(-5px);
--        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-+        transform: translateX(4px);
-+        box-shadow: -4px 0 20px rgba(0, 229, 192, 0.1);
-       }
- 
-       .card h3 {
--        font-size: 1.3rem;
--        margin-bottom: 15px;
-+        font-size: 1.15rem;
-+        margin-bottom: 16px;
-         display: flex;
-         align-items: center;
-         gap: 10px;
-+        color: var(--text-light);
-+      }
-+
-+      .card p {
-+        line-height: 1.85;
-+        color: #adbcd8;
-+        font-size: 0.96rem;
-       }
- 
-       .card ul {
--        padding-left: 20px;
--      }
--
--      .card li {
--        margin-bottom: 10px;
-+        padding-left: 0;
-+        list-style: none;
-+      }
-+
-+      .card ul li {
-+        padding-left: 18px;
-+        position: relative;
-+        margin-bottom: 12px;
-+        color: #adbcd8;
-+        font-size: 0.95rem;
-+        line-height: 1.75;
-+      }
-+
-+      .card ul li::before {
-+        content: '▸';
-+        position: absolute;
-+        left: 0;
-+        color: var(--accent-primary);
-+        font-size: 0.8em;
-+        top: 3px;
-+      }
-+
-+      /* Divider Enhancement */
-+      .divider {
-+        height: 1px;
-+        background: linear-gradient(to right, transparent, var(--accent-primary), transparent);
-+        margin: 60px 0;
-+        position: relative;
-+      }
-+      .divider::before {
-+        content: '✦';
-+        position: absolute;
-+        left: 50%;
-+        top: 50%;
-+        transform: translate(-50%, -50%);
-+        background: var(--bg-main);
-+        color: var(--accent-primary);
-+        padding: 0 12px;
-+        font-size: 0.75rem;
-+      }
-+
-+      /* Responsive */
-+      @media (max-width: 768px) {
-+        .resume-container {
-+          flex-direction: column;
-+        }
-+        .sidebar, .main-content {
-+          width: 100%;
-+        }
-       }
- 
-       /* Print Media Query */
-@@ -270,15 +412,21 @@           background-color: var(--bg-main) !important;
-           -webkit-print-color-adjust: exact;
-           print-color-adjust: exact;
--          padding: 0;
-+          padding: 20px;
-+        }
-+        .header::after {
-+          display: none;
-         }
-         .card {
-           page-break-inside: avoid;
--          box-shadow: none;
-+          box-shadow: none !important;
-           transform: none !important;
-         }
-         .resume-container {
-           page-break-inside: avoid;
-+        }
-+        .cover-letter-section {
-+          page-break-before: always;
-         }
-       }
-     </style>
-@@ -287,7 +435,7 @@     <!-- Header -->
-     <header class="header">
-       <h1>오재영</h1>
--      <h2>게임 클라이언트 프로그래머</h2>
-+      <div class="header-role">Game Client Programmer</div>
-     </header>
- 
-     <!-- Resume Section -->
-@@ -295,13 +443,14 @@       <!-- Left Sidebar -->
-       <aside class="sidebar">
-         <div class="sidebar-section contact-info">
--          <h3>인적사항</h3>
-+          <h3>📋 인적사항</h3>
-           <p>📞 010-8923-9520</p>
-           <p>📧 ostyoung@gmail.com</p>
-+          <p>💼 클라이언트 프로그래머</p>
-         </div>
- 
-         <div class="sidebar-section">
--          <h3>기술스택</h3>
-+          <h3>🛠 기술스택</h3>
-           <div class="tech-tags">
-             <span class="tag">Unity</span>
-             <span class="tag">C#</span>
-@@ -312,7 +461,7 @@         </div>
- 
-         <div class="sidebar-section">
--          <h3>학력</h3>
-+          <h3>🎓 학력</h3>
-           <div class="timeline">
-             <div class="timeline-item">
-               <div class="timeline-date">2023.04 ~ 2024.02</div>
-@@ -322,7 +471,7 @@             <div class="timeline-item">
-               <div class="timeline-date">2021.03 ~ 2022.10</div>
-               <div class="timeline-title">서울호서전문학교</div>
--              <div class="timeline-subtitle">게임제작과 중퇴</div>
-+              <div class="timeline-subtitle">게임제작과 (중퇴)</div>
-             </div>
-             <div class="timeline-item">
-               <div class="timeline-date">2019.03 ~ 2020.02</div>
-@@ -335,14 +484,14 @@ 
-       <!-- Right Main Content -->
-       <main class="main-content">
--        <h2 class="section-title">경력사항</h2>
-+        <h2 class="section-title">💼 경력사항</h2>
- 
-         <div class="timeline">
-           <!-- 스노우파이프 -->
-           <div class="timeline-item experience-item">
-             <div class="exp-header">
-               <h3>스노우파이프</h3>
--              <span class="badge">현재 재직 중</span>
-+              <span class="badge">현재 재직 중 🟢</span>
-             </div>
-             <div class="timeline-date">2024.11.11 ~ 현재 | 클라이언트 프로그래머 (정규직)</div>
-             <div class="exp-project">TA 프로젝트</div>
-@@ -388,7 +537,7 @@           <div class="timeline-item experience-item">
-             <div class="exp-header">
-               <h3>지앤아이소프트</h3>
--              <span class="badge">인턴</span>
-+              <span class="badge intern">인턴</span>
-             </div>
-             <div class="timeline-date">2024.04.01 ~ 2024.06.25 | 클라이언트 프로그래머 (인턴)</div>
-             <ul class="exp-list">
-@@ -408,15 +557,28 @@ 
-     <!-- Cover Letter Section -->
-     <section class="cover-letter-section">
--      <h2>자기소개서</h2>
-+      <div class="cl-header">
-+        <h2><span class="cl-accent">자기</span>소개서</h2>
-+      </div>
-+      <p class="cl-subtext">게임 클라이언트 프로그래머 지원 · 오재영</p>
- 
-       <div class="card">
-         <h3>🎮 자기소개 및 지원 동기</h3>
-         <p>
--          경일게임아카데미에서 게임 클라이언트 개발을 시작으로, 인턴 경험을 거쳐 현재 정규직 클라이언트 프로그래머로
--          성장해온 여정. 게임이 단순한 오락을 넘어 기술과 경험이 결합된 인터랙티브 예술이라고 생각하며, 그 경험을 만드는
--          클라이언트 프로그래머로서 열정을 가지고 있음. 아카데미에서 기반을 닦고 실무에서 AR, GPS, 시스템 설계 등 다양한
--          도전을 통해 지속 성장 중.
-+          저는 게임을 단순한 오락이 아니라, 기술과 감성이 결합된 인터랙티브 경험이라고 생각합니다.
-+          그 경험을 직접 설계하고 구현하는 클라이언트 프로그래머라는 직무에 매력을 느껴 이 길을 선택했습니다.
-+        </p>
-+        <br/>
-+        <p>
-+          경일게임아카데미에서 게임 클라이언트 개발의 기초부터 심화까지 체계적으로 학습하며 개발자로서의 기반을 다졌습니다.
-+          이후 지앤아이소프트에서의 인턴 경험을 통해 실제 라이브 서비스 환경에서 빠른 버그 대응과 기능 개발을 경험하였고,
-+          현재는 스노우파이프에서 정규직 클라이언트 프로그래머로서 AR 콘텐츠, GPS 기반 지도 시스템, 연출 스케줄링 등
-+          다양한 기술적 도전을 수행하며 성장하고 있습니다.
-+        </p>
-+        <br/>
-+        <p>
-+          앞으로도 플레이어가 더 몰입할 수 있는 게임 경험을 만드는 데 기여하고 싶으며,
-+          기술적 깊이와 실무 감각을 겸비한 클라이언트 프로그래머로 계속 발전하고자 합니다.
-         </p>
-       </div>
- 
-@@ -424,14 +586,26 @@         <h3>⚡ 핵심 역량 및 성과</h3>
-         <ul>
-           <li>
--            <strong>AR 콘텐츠 구현:</strong> 3D→2D 좌표 변환, AR On/Off 공통 로직 구조 설계 등 AR 특화 클라이언트 기술
--          </li>
--          <li><strong>시스템 설계 역량:</strong> 우선순위 기반 연출 스케줄링 시스템(Scheduler+Director) 독립 설계</li>
--          <li><strong>에디터 툴 제작:</strong> JSON 기반 맵 에디터(배치/시뮬레이션/저장·로드) 제작으로 생산성 향상</li>
--          <li>
--            <strong>코드 품질:</strong> Attribute 기반 자동 검증 시스템으로 데이터 오류 사전 탐지, 유지보수성 향상
--          </li>
--          <li><strong>GPS/지도 기술:</strong> GOMap/OSM 활용 위경도↔월드좌표 변환 및 RenderTexture 분리 구조</li>
-+            <strong>AR 콘텐츠 구현:</strong> 3D 월드 좌표를 2D UI 좌표로 변환하는 시스템을 직접 설계하여
-+            AR 환경에서도 안정적인 탐색 판정 및 콘텐츠 구동을 가능하게 하였습니다.
-+            AR On/Off 전환을 고려한 공통 게임 로직 구조를 설계해 에디터·모바일 환경 모두 대응하였습니다.
-+          </li>
-+          <li>
-+            <strong>시스템 설계 역량:</strong> 로비 내 복수 연출의 동시 실행 경합 문제를 해결하기 위해
-+            우선순위 기반 연출 스케줄링 시스템(Scheduler + Director 구조)을 독립적으로 설계·구현하였습니다.
-+          </li>
-+          <li>
-+            <strong>에디터 툴 제작:</strong> JSON 로우데이터 기반 미니게임 맵을 동적으로 구성하는 전용 에디터 툴을 제작하여
-+            배치·시뮬레이션·저장·로드 기능을 통합함으로써 맵 제작 효율을 크게 향상시켰습니다.
-+          </li>
-+          <li>
-+            <strong>데이터 품질 자동화:</strong> Attribute 기반 테이블·리소스 검증 시스템을 구축하여 데이터 오류를 배포 전에
-+            자동 탐지하고, 검증된 ID 기반 드랍다운 UI를 제공해 QA 효율을 높였습니다.
-+          </li>
-+          <li>
-+            <strong>GPS/지도 기술:</strong> GOMap과 OSM을 활용해 위도·경도 데이터를 월드 좌표로 변환하는
-+            GPS 기반 지도 콘텐츠를 구현하였으며, RenderTexture 기반 분리 구조로 레이아웃 변화에도 안정적으로 표시되도록 개선하였습니다.
-+          </li>
-         </ul>
-       </div>
- 
-@@ -439,15 +613,24 @@         <h3>🤝 협업 및 문제 해결 경험</h3>
-         <ul>
-           <li>
--            <strong>로비 연출 경합 문제:</strong> 여러 연출이 동시에 실행될 때 발생하는 경합 이슈를 우선순위 기반
--            Scheduler+Director 패턴으로 해결
--          </li>
--          <li>
--            <strong>전투 시스템 버그:</strong> 레벨업 반영 시점 오류를 전투 시작/종료 데이터 분리 구조 리팩토링으로 해결
--          </li>
--          <li><strong>검증 자동화:</strong> 반복적인 데이터 검증 작업을 Attribute 기반 자동화 시스템으로 효율화</li>
--          <li>
--            인턴 시절 라이브 게임 서비스 경험을 통해 실제 사용자가 있는 환경에서의 버그 수정과 빠른 대응 능력 습득
-+            <strong>로비 연출 경합 문제 해결:</strong> 일일 집계, 성장 연출 등 여러 연출이 동시에 트리거되어 순서가 꼬이는
-+            경합 이슈가 반복적으로 발생하였습니다. 이를 해결하기 위해 우선순위 기반 연출 스케줄링 시스템(Scheduler + Director)
-+            을 독립적으로 설계하여 연출 충돌 없이 순차·우선 실행이 가능한 구조를 구축하였습니다.
-+          </li>
-+          <li>
-+            <strong>전투 시스템 레벨업 버그 수정:</strong> 서버 판정 기반 전투에서 레벨업이 전투 도중 발생할 경우
-+            경험치 연출 흐름이 어긋나는 버그가 있었습니다. 전투 시작과 종료 데이터를 분리하는 구조로 리팩토링하여
-+            레벨업 반영 시점을 명확히 하고, 연출 흐름을 안정적으로 개선하였습니다.
-+          </li>
-+          <li>
-+            <strong>라이브 서비스 대응 경험:</strong> 지앤아이소프트 인턴 시절, 실제 서비스 중인 '조선협객전 M'의
-+            버그 수정과 신규 시스템(PVP 흉신악살, 문파 기능 등)을 빠르게 도입하며 실 사용자 환경에서의 대응 능력과
-+            코드 안정성의 중요성을 직접 체득하였습니다.
-+          </li>
-+          <li>
-+            <strong>에디터 툴을 통한 팀 협업 효율화:</strong> 맵 에디터 툴 제작 시 기획자와 충분히 소통하여
-+            요구 사항을 기능 단위로 명확히 정의하고, 시뮬레이션 기능을 추가해 실제 인게임과 동일한 환경에서
-+            검증할 수 있도록 하였습니다. 이를 통해 기획·개발 간 커뮤니케이션 비용을 줄이고 반복 수정 사이클을 단축하였습니다.
-           </li>
-         </ul>
-       </div>
-@@ -455,9 +638,19 @@       <div class="card">
-         <h3>🚀 입사 후 포부</h3>
-         <p>
--          더 깊은 기술적 전문성을 갖춘 클라이언트 프로그래머로 성장하고 싶음. AR, GPS 등 신기술을 활용한 독창적인 게임
--          경험 구현에 기여하고, 팀의 개발 효율을 높이는 에디터 툴과 시스템 설계 역량을 발휘하겠음. 장기적으로는 시니어
--          프로그래머로서 팀의 기술 기반을 강화하는 역할을 맡고 싶음.
-+          입사 후에는 기존 업무에 빠르게 적응하고, 클라이언트 개발에서 실질적인 기여를 만들어 나가겠습니다.
-+          AR, GPS, 실시간 시스템 설계 등 현재 쌓아온 경험을 바탕으로, 팀이 필요로 하는 곳에 주도적으로 참여하고
-+          완성도 높은 결과물을 함께 만들어 가고 싶습니다.
-+        </p>
-+        <br/>
-+        <p>
-+          또한 에디터 툴 제작이나 검증 자동화 시스템 등 팀의 개발 효율을 높이는 방향으로도 기여하겠습니다.
-+          혼자만 잘하는 프로그래머가 아니라, 팀 전체의 생산성과 코드 품질을 함께 높여가는 동료가 되는 것이 목표입니다.
-+        </p>
-+        <br/>
-+        <p>
-+          장기적으로는 폭넓은 게임 클라이언트 기술에 대한 깊은 이해를 갖추고, 팀의 기술적 방향을 함께 고민하고 이끌 수 있는
-+          시니어 프로그래머로 성장하겠습니다. 좋은 게임을 만드는 데 있어 기술적 기반을 든든히 다지는 역할을 맡고 싶습니다.
-         </p>
-       </div>
-     </section>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오재영 - 게임 클라이언트 프로그래머 이력서 및 자기소개서</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-main: #0a1628;
+        --bg-sidebar: #112240;
+        --bg-card: #1a2f4e;
+        --accent-primary: #00e5c0;
+        --accent-secondary: #64ffda;
+        --text-main: #ccd6f6;
+        --text-light: #e6f1ff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Noto Sans KR', sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.7;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 40px;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: var(--text-light);
+      }
+
+      /* Header */
+      .header {
+        margin-bottom: 40px;
+        padding: 36px 40px;
+        background: linear-gradient(135deg, #0d2244 0%, #0a1628 100%);
+        border-left: 5px solid var(--accent-primary);
+        border-radius: 6px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::after {
+        content: '</ >';
+        position: absolute;
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 5rem;
+        font-weight: 700;
+        color: rgba(0, 229, 192, 0.06);
+        font-family: monospace;
+        letter-spacing: -4px;
+      }
+
+      .header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+      }
+
+      .header .header-role {
+        font-size: 1.15rem;
+        color: var(--accent-primary);
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .header .header-role::before {
+        content: '';
+        display: inline-block;
+        width: 24px;
+        height: 2px;
+        background: var(--accent-primary);
+      }
+
+      /* Resume Layout */
+      .resume-container {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 60px;
+      }
+
+      /* Sidebar (Left) */
+      .sidebar {
+        width: 30%;
+        background-color: var(--bg-sidebar);
+        padding: 30px;
+        border-radius: 8px;
+        border-top: 3px solid var(--accent-primary);
+        align-self: flex-start;
+      }
+
+      .sidebar-section {
+        margin-bottom: 30px;
+      }
+
+      .sidebar-section h3 {
+        color: var(--accent-primary);
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+        border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        padding-bottom: 5px;
+      }
+
+      .contact-info p {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Tech Tags */
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .tag {
+        background-color: rgba(0, 229, 192, 0.08);
+        color: var(--accent-secondary);
+        border: 1px solid rgba(100, 255, 218, 0.4);
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: background 0.2s;
+      }
+
+      .tag:hover {
+        background-color: rgba(0, 229, 192, 0.2);
+      }
+
+      /* Timeline */
+      .timeline {
+        position: relative;
+        padding-left: 20px;
+        border-left: 2px solid rgba(100, 255, 218, 0.3);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 25px;
+      }
+
+      .timeline-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -26px;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        background-color: var(--accent-primary);
+        border-radius: 50%;
+      }
+
+      .timeline-date {
+        font-size: 0.85rem;
+        color: var(--accent-secondary);
+        margin-bottom: 5px;
+      }
+
+      .timeline-title {
+        font-weight: 700;
+        color: var(--text-light);
+      }
+
+      .timeline-subtitle {
+        font-size: 0.9rem;
+      }
+
+      /* Main Content (Right) */
+      .main-content {
+        width: 70%;
+      }
+
+      .section-title {
+        color: var(--accent-primary);
+        font-size: 1.25rem;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .section-title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(100, 255, 218, 0.2);
+      }
+
+      .experience-item {
+        margin-bottom: 40px;
+      }
+
+      .exp-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 6px;
+        flex-wrap: wrap;
+      }
+
+      .exp-header h3 {
+        font-size: 1.2rem;
+        color: var(--text-light);
+      }
+
+      .badge {
+        background-color: rgba(0, 229, 192, 0.12);
+        color: var(--accent-primary);
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border: 1px solid rgba(0, 229, 192, 0.3);
+        letter-spacing: 0.5px;
+      }
+
+      .badge.intern {
+        background-color: rgba(255, 200, 100, 0.1);
+        color: #ffc864;
+        border-color: rgba(255, 200, 100, 0.3);
+      }
+
+      .exp-project {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: var(--accent-secondary);
+        background: rgba(100, 255, 218, 0.07);
+        border: 1px solid rgba(100, 255, 218, 0.2);
+        padding: 3px 12px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+
+      .exp-list {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .exp-list li {
+        position: relative;
+        padding-left: 15px;
+        margin-bottom: 8px;
+      }
+
+      .exp-list li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--accent-primary);
+        font-size: 0.85em;
+      }
+
+      /* Divider Enhancement */
+      .divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--accent-primary), transparent);
+        margin: 60px 0;
+        position: relative;
+      }
+
+      .divider::before {
+        content: '✦';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg-main);
+        color: var(--accent-primary);
+        padding: 0 12px;
+        font-size: 0.75rem;
+      }
+
+      /* Cover Letter */
+      .cover-letter-section .cl-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 40px;
+      }
+
+      .cover-letter-section .cl-header h2 {
+        color: var(--text-light);
+        font-size: 1.8rem;
+      }
+
+      .cover-letter-section .cl-header .cl-accent {
+        color: var(--accent-primary);
+      }
+
+      .cl-subtext {
+        text-align: center;
+        color: rgba(204, 214, 246, 0.5);
+        font-size: 0.88rem;
+        margin-top: -30px;
+        margin-bottom: 36px;
+        letter-spacing: 0.5px;
+      }
+
+      .card {
+        background-color: var(--bg-card);
+        border-left: 4px solid var(--accent-primary);
+        padding: 32px 36px;
+        margin-bottom: 24px;
+        border-radius: 0 6px 6px 0;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        position: relative;
+      }
+
+      .card:nth-child(3) {
+        border-left-color: #7b8cde;
+      }
+
+      .card:nth-child(4) {
+        border-left-color: #6fc3df;
+      }
+
+      .card:nth-child(5) {
+        border-left-color: #64ffda;
+      }
+
+      .card:hover {
+        transform: translateX(4px);
+        box-shadow: -4px 0 20px rgba(0, 229, 192, 0.1);
+      }
+
+      .card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-light);
+      }
+
+      .card p {
+        line-height: 1.85;
+        color: #adbcd8;
+        font-size: 0.96rem;
+      }
+
+      .card ul {
+        padding-left: 0;
+        list-style: none;
+      }
+
+      .card ul li {
+        padding-left: 18px;
+        position: relative;
+        margin-bottom: 12px;
+        color: #adbcd8;
+        font-size: 0.95rem;
+        line-height: 1.75;
+      }
+
+      .card ul li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--accent-primary);
+        font-size: 0.8em;
+        top: 3px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 24px 18px;
+        }
+
+        .resume-container {
+          flex-direction: column;
+        }
+
+        .sidebar,
+        .main-content {
+          width: 100%;
+        }
+      }
+
+      /* Print Media Query */
+      @media print {
+        body {
+          background-color: var(--bg-main) !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          padding: 20px;
+        }
+
+        .header::after {
+          display: none;
+        }
+
+        .card {
+          page-break-inside: avoid;
+          box-shadow: none !important;
+          transform: none !important;
+        }
+
+        .resume-container {
+          page-break-inside: avoid;
+        }
+
+        .cover-letter-section {
+          page-break-before: always;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <h1>오재영</h1>
+      <div class="header-role">Game Client Programmer</div>
+    </header>
+
+    <!-- Resume Section -->
+    <div class="resume-container">
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section contact-info">
+          <h3>📋 인적사항</h3>
+          <p>📞 010-8923-9520</p>
+          <p>📧 ostyoung@gmail.com</p>
+          <p>💼 클라이언트 프로그래머</p>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>🛠 기술스택</h3>
+          <div class="tech-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">C++</span>
+            <span class="tag">Jenkins</span>
+            <span class="tag">Android</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>🎓 학력</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">2023.04 ~ 2024.02</div>
+              <div class="timeline-title">경일게임아카데미</div>
+              <div class="timeline-subtitle">게임 클라이언트 개발 과정 수료</div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-date">2021.03 ~ 2022.10</div>
+              <div class="timeline-title">서울호서전문학교</div>
+              <div class="timeline-subtitle">게임제작과 (중퇴)</div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-date">2019.03 ~ 2020.02</div>
+              <div class="timeline-title">한국폴리텍대학교</div>
+              <div class="timeline-subtitle">전자과 수료</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Main Content -->
+      <main class="main-content">
+        <h2 class="section-title">💼 경력사항</h2>
+
+        <div class="timeline">
+          <!-- 스노우파이프 -->
+          <div class="timeline-item experience-item">
+            <div class="exp-header">
+              <h3>스노우파이프</h3>
+              <span class="badge">현재 재직 중 🟢</span>
+            </div>
+
+            <div class="timeline-date">2024.11.11 ~ 현재 | 클라이언트 프로그래머 (정규직)</div>
+            <div class="exp-project">TA 프로젝트</div>
+
+            <ul class="exp-list">
+              <li>
+                AR 기반 3단계 소환 콘텐츠(탐색/미니게임/보상) 클라이언트 구현 및 AR On/Off, 에디터/모바일 환경을 고려한 공통 게임 로직 구조 설계
+              </li>
+              <li>3D 월드 좌표를 2D UI 좌표로 변환하여 AR 환경에서도 UI 영역 기반 탐색 판정 시스템 구현</li>
+              <li>
+                Json 로우데이터 기반 미니게임 맵 동적 구성 및 전용 에디터 툴 제작(배치/시뮬레이션/저장·로드)으로 맵 제작 효율 개선
+              </li>
+              <li>해상도별 카메라 위치를 동적으로 계산하는 베스트핏 구조를 적용하여 기기별 플레이 경험 일관성 확보</li>
+              <li>
+                GPS 기반 지도형 기록 콘텐츠 구현(GOMap/OSM 활용), 위도·경도 데이터를 월드 좌표로 변환해 지도 위 활동 로그 시각화 연출 구성
+              </li>
+              <li>
+                RenderTexture 기반 구조로 지도 연출과 UI를 분리하여 레이아웃 변화 및 마스킹 환경에서도 안정적으로 표시되도록 개선
+              </li>
+              <li>
+                로비 연출(일일 집계/성장 연출 등) 동시 실행 경합 문제를 해결하기 위해 우선순위 기반 연출 스케줄링 시스템(Scheduler + Director) 설계 및 구현
+              </li>
+              <li>
+                서버 판정 기반 전투 시스템에서 전투 시작/종료 데이터 분리 구조로 리팩토링하여 레벨업 반영 시점 오류 해결 및 경험치 연출 흐름 개선
+              </li>
+              <li>
+                Attribute 기반 테이블/리소스 검증 자동화 시스템을 구축하여 데이터 오류를 사전 탐지하고, 검증 통과 데이터 기반 ID 드랍다운 UI로 테스트 효율 개선
+              </li>
+              <li>
+                트랜스포머/스킬/파워칩 기반 전투원 관리 UI 구현 및 프리셋/정렬/검색/툴팁/파워링크 기능 공통화로 UX 및 유지보수성 개선
+              </li>
+            </ul>
+          </div>
+
+          <!-- 지앤아이소프트 -->
+          <div class="timeline-item experience-item">
+            <div class="exp-header">
+              <h3>지앤아이소프트</h3>
+              <span class="badge intern">인턴</span>
+            </div>
+
+            <div class="timeline-date">2024.04.01 ~ 2024.06.25 | 클라이언트 프로그래머 (인턴)</div>
+
+            <ul class="exp-list">
+              <li>조선협객전 M 라이브 게임 서비스 및 버그 수정</li>
+              <li>PVP 흉신악살 시스템 도입</li>
+              <li>문파원 정렬 기능 구현</li>
+              <li>문파 축지 기능 구현</li>
+              <li>캐시 포션 아이템 제작</li>
+            </ul>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Cover Letter Section -->
+    <section class="cover-letter-section">
+      <div class="cl-header">
+        <h2><span class="cl-accent">자기</span>소개서</h2>
+      </div>
+
+      <p class="cl-subtext">게임 클라이언트 프로그래머 지원 · 오재영</p>
+
+      <div class="card">
+        <h3>🎮 자기소개 및 지원 동기</h3>
+        <p>
+          저는 게임을 단순한 오락이 아니라, 기술과 감성이 결합된 인터랙티브 경험이라고 생각합니다.
+          그 경험을 직접 설계하고 구현하는 클라이언트 프로그래머라는 직무에 매력을 느껴 이 길을 선택했습니다.
+        </p>
+        <br />
+        <p>
+          경일게임아카데미에서 게임 클라이언트 개발의 기초부터 심화까지 체계적으로 학습하며 개발자로서의 기반을 다졌습니다.
+          이후 지앤아이소프트에서의 인턴 경험을 통해 실제 라이브 서비스 환경에서 빠른 버그 대응과 기능 개발을 경험하였고,
+          현재는 스노우파이프에서 정규직 클라이언트 프로그래머로서 AR 콘텐츠, GPS 기반 지도 시스템, 연출 스케줄링 등
+          다양한 기술적 도전을 수행하며 성장하고 있습니다.
+        </p>
+        <br />
+        <p>
+          앞으로도 플레이어가 더 몰입할 수 있는 게임 경험을 만드는 데 기여하고 싶으며,
+          기술적 깊이와 실무 감각을 겸비한 클라이언트 프로그래머로 계속 발전하고자 합니다.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>⚡ 핵심 역량 및 성과</h3>
+        <ul>
+          <li>
+            <strong>AR 콘텐츠 구현:</strong> 3D 월드 좌표를 2D UI 좌표로 변환하는 시스템을 직접 설계하여
+            AR 환경에서도 안정적인 탐색 판정 및 콘텐츠 구동을 가능하게 하였습니다.
+            AR On/Off 전환을 고려한 공통 게임 로직 구조를 설계해 에디터·모바일 환경 모두 대응하였습니다.
+          </li>
+          <li>
+            <strong>시스템 설계 역량:</strong> 로비 내 복수 연출의 동시 실행 경합 문제를 해결하기 위해
+            우선순위 기반 연출 스케줄링 시스템(Scheduler + Director 구조)을 독립적으로 설계·구현하였습니다.
+          </li>
+          <li>
+            <strong>에디터 툴 제작:</strong> JSON 로우데이터 기반 미니게임 맵을 동적으로 구성하는 전용 에디터 툴을 제작하여
+            배치·시뮬레이션·저장·로드 기능을 통합함으로써 맵 제작 효율을 크게 향상시켰습니다.
+          </li>
+          <li>
+            <strong>데이터 품질 자동화:</strong> Attribute 기반 테이블·리소스 검증 시스템을 구축하여 데이터 오류를 배포 전에
+            자동 탐지하고, 검증된 ID 기반 드랍다운 UI를 제공해 QA 효율을 높였습니다.
+          </li>
+          <li>
+            <strong>GPS/지도 기술:</strong> GOMap과 OSM을 활용해 위도·경도 데이터를 월드 좌표로 변환하는
+            GPS 기반 지도 콘텐츠를 구현하였으며, RenderTexture 기반 분리 구조로 레이아웃 변화에도 안정적으로 표시되도록 개선하였습니다.
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🤝 협업 및 문제 해결 경험</h3>
+        <ul>
+          <li>
+            <strong>로비 연출 경합 문제 해결:</strong> 일일 집계, 성장 연출 등 여러 연출이 동시에 트리거되어 순서가 꼬이는
+            경합 이슈가 반복적으로 발생하였습니다. 이를 해결하기 위해 우선순위 기반 연출 스케줄링 시스템(Scheduler + Director)을
+            독립적으로 설계하여 연출 충돌 없이 순차·우선 실행이 가능한 구조를 구축하였습니다.
+          </li>
+          <li>
+            <strong>전투 시스템 레벨업 버그 수정:</strong> 서버 판정 기반 전투에서 레벨업이 전투 도중 발생할 경우
+            경험치 연출 흐름이 어긋나는 버그가 있었습니다. 전투 시작과 종료 데이터를 분리하는 구조로 리팩토링하여
+            레벨업 반영 시점을 명확히 하고, 연출 흐름을 안정적으로 개선하였습니다.
+          </li>
+          <li>
+            <strong>라이브 서비스 대응 경험:</strong> 지앤아이소프트 인턴 시절, 실제 서비스 중인 '조선협객전 M'의
+            버그 수정과 신규 시스템(PVP 흉신악살, 문파 기능 등)을 빠르게 도입하며 실 사용자 환경에서의 대응 능력과
+            코드 안정성의 중요성을 직접 체득하였습니다.
+          </li>
+          <li>
+            <strong>에디터 툴을 통한 팀 협업 효율화:</strong> 맵 에디터 툴 제작 시 기획자와 충분히 소통하여
+            요구 사항을 기능 단위로 명확히 정의하고, 시뮬레이션 기능을 추가해 실제 인게임과 동일한 환경에서
+            검증할 수 있도록 하였습니다. 이를 통해 기획·개발 간 커뮤니케이션 비용을 줄이고 반복 수정 사이클을 단축하였습니다.
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🚀 입사 후 포부</h3>
+        <p>
+          입사 후에는 기존 업무에 빠르게 적응하고, 클라이언트 개발에서 실질적인 기여를 만들어 나가겠습니다.
+          AR, GPS, 실시간 시스템 설계 등 현재 쌓아온 경험을 바탕으로, 팀이 필요로 하는 곳에 주도적으로 참여하고
+          완성도 높은 결과물을 함께 만들어 가고 싶습니다.
+        </p>
+        <br />
+        <p>
+          또한 에디터 툴 제작이나 검증 자동화 시스템 등 팀의 개발 효율을 높이는 방향으로도 기여하겠습니다.
+          혼자만 잘하는 프로그래머가 아니라, 팀 전체의 생산성과 코드 품질을 함께 높여가는 동료가 되는 것이 목표입니다.
+        </p>
+        <br />
+        <p>
+          장기적으로는 폭넓은 게임 클라이언트 기술에 대한 깊은 이해를 갖추고,
+          팀의 기술적 방향을 함께 고민하고 이끌 수 있는 시니어 프로그래머로 성장하겠습니다.
+          좋은 게임을 만드는 데 있어 기술적 기반을 든든히 다지는 역할을 맡고 싶습니다.
+        </p>
+      </div>
+    </section>
+  </body>
+</html>
