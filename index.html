@@ -338,9 +338,7 @@
         padding: 32px 36px;
         margin-bottom: 24px;
         border-radius: 0 6px 6px 0;
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         position: relative;
       }
 
@@ -415,27 +413,133 @@
         }
       }
 
-      /* Print Media Query */
+      /* Print Media Query (PDF 최적화) */
       @media print {
         body {
-          background-color: var(--bg-main) !important;
+          background: white !important;
+          color: black !important;
+          max-width: 100% !important;
+          padding: 20px !important;
+          margin: 0 !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
-          padding: 20px;
+        }
+
+        .header {
+          background: white !important;
+          border-left: 5px solid #00e5c0 !important;
         }
 
         .header::after {
-          display: none;
+          display: none !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+          color: black !important;
+        }
+
+        /* PDF에서는 2컬럼 -> 1컬럼 */
+        .resume-container {
+          display: block !important;
+          margin-bottom: 30px !important;
+        }
+
+        .sidebar,
+        .main-content {
+          width: 100% !important;
+        }
+
+        .sidebar {
+          background: white !important;
+          border-top: 2px solid #00e5c0 !important;
+          padding: 0 !important;
+          margin-bottom: 20px !important;
+        }
+
+        .sidebar-section h3 {
+          color: black !important;
+          border-bottom: 1px solid #ccc !important;
+        }
+
+        .timeline {
+          border-left: 2px solid #ccc !important;
+        }
+
+        .timeline-item::before {
+          background-color: #00e5c0 !important;
+        }
+
+        .timeline-date {
+          color: #444 !important;
+        }
+
+        .timeline-title {
+          color: black !important;
+        }
+
+        .exp-project {
+          background: #f3f3f3 !important;
+          border: 1px solid #ccc !important;
+          color: black !important;
+        }
+
+        .badge {
+          background: #f3f3f3 !important;
+          border: 1px solid #ccc !important;
+          color: black !important;
+        }
+
+        .badge.intern {
+          background: #fff3e0 !important;
+          border: 1px solid #ffb74d !important;
+          color: black !important;
+        }
+
+        .section-title {
+          color: black !important;
+        }
+
+        .section-title::after {
+          background: #ccc !important;
+        }
+
+        .divider {
+          background: #ccc !important;
+          margin: 30px 0 !important;
+        }
+
+        .divider::before {
+          display: none !important;
         }
 
         .card {
-          page-break-inside: avoid;
+          background: white !important;
+          border-left: 3px solid #00e5c0 !important;
           box-shadow: none !important;
           transform: none !important;
+          padding: 16px 18px !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
 
-        .resume-container {
-          page-break-inside: avoid;
+        .card h3 {
+          color: black !important;
+        }
+
+        .card p,
+        .card ul li {
+          color: black !important;
+        }
+
+        .timeline-item,
+        .experience-item,
+        ul,
+        li {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
 
         .cover-letter-section {
@@ -663,7 +767,7 @@
         <p>
           장기적으로는 폭넓은 게임 클라이언트 기술에 대한 깊은 이해를 갖추고,
           팀의 기술적 방향을 함께 고민하고 이끌 수 있는 시니어 프로그래머로 성장하겠습니다.
-          좋은 게임을 만드는 데 있어 기술적 기반을 든든히 다지는 역할을 맡고 싶습니다.
+          좋은 게임을 만드는 데 있어 기술적 기반을 든든히 다듬는 역할을 맡고 싶습니다.
         </p>
       </div>
     </section>
