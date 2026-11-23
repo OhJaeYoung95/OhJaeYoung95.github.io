@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
-/* 레이아웃: 터미널 창 머리말 → 역량 요약 → 프로젝트마다 [사례 목록 | 인터뷰식 상세] 2열. 인쇄 시 상세를 모두 펼침 */
+/* 레이아웃: 소개(읽는 순서) → 역량 요약 → 프로젝트마다 [사례 카드 | 검토 기록식 상세] 2열. 인쇄 시 상세를 모두 펼침 */
 :root{
   --bg:#0a0f13; --panel:#0f171d; --panel-2:#132029; --line:#1d2b35; --line-strong:#2a3d4a;
   --fg:#e3ecf1; --muted:#8597a4; --faint:#5d6f7c;
@@ -32,14 +32,17 @@ p{margin:0}
 a{color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 
-/* 터미널 창 */
-.term{background:var(--panel);border:1px solid var(--line-strong);border-radius:14px;overflow:hidden}
-.term-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:12.5px;color:var(--faint)}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
-.dot:first-child{background:var(--accent)}
-.term-body{padding:clamp(24px,5vw,48px);display:flex;flex-direction:column;gap:22px}
-.prompt{font-family:var(--font-mono);font-size:14px;color:var(--muted)}
-.prompt b{color:var(--accent);font-weight:500}
+/* 머리말 */
+.hero{background:var(--panel);border:1px solid var(--line-strong);border-radius:14px;padding:clamp(24px,5vw,48px);display:flex;flex-direction:column;gap:22px}
+.who-line{font-size:14px;color:var(--muted)}
+.toc{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:10px}
+.toc-h{font-size:13px;color:var(--faint)}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.toc a{display:flex;flex-direction:column;gap:2px;height:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);color:var(--fg);text-decoration:none;transition:border-color .2s}
+.toc a:hover{border-color:var(--line-strong)}
+.toc .part{font-family:var(--font-mono);font-size:11.5px;color:var(--faint)}
+.toc b{font-size:15px}
+.toc .desc{font-size:13px;color:var(--muted);line-height:1.55}
 .hero h1{font-size:clamp(30px,5.4vw,52px);font-weight:700;letter-spacing:-.02em}
 .hero h1 em{font-style:normal;color:var(--accent)}
 .hero .lead{max-width:62ch;color:var(--muted);font-size:16.5px}
@@ -49,6 +52,13 @@ a{color:var(--accent)}
 .sec-head{display:flex;flex-direction:column;gap:10px;max-width:70ch}
 .sec-head h2{font-size:clamp(24px,3.4vw,32px);font-weight:700;letter-spacing:-.01em}
 .sec-head p{color:var(--muted)}
+.role-line{font-size:14.5px;color:var(--fg)!important;display:flex;gap:10px;align-items:baseline}
+.role-line b{flex:none;font-size:12px;font-weight:500;color:var(--faint);border:1px solid var(--line-strong);border-radius:6px;padding:0 7px}
+.proj-sec{--pc:var(--accent);border-left:3px solid var(--pc);padding-left:clamp(14px,3vw,28px)}
+.proj-sec[data-proj="sb"]{--pc:var(--sb)}
+.proj-sec[data-proj="ta"]{--pc:var(--ta)}
+.proj-sec .eyebrow{color:var(--pc)}
+.legend{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 
 /* 태그 */
 .tag{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:6px;white-space:nowrap}
@@ -76,7 +86,7 @@ a{color:var(--accent)}
 .facts dd{margin:0}
 .setup{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .setup li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:14.5px}
-.setup li::before{content:">";font-family:var(--font-mono);color:var(--accent)}
+.setup li::before{content:"";width:6px;height:6px;margin:.7em 0 0 6px;border-radius:50%;background:var(--pc,var(--accent))}
 .setup b{font-weight:600}
 .note{font-size:13px;color:var(--faint)}
 
@@ -88,56 +98,74 @@ a{color:var(--accent)}
   display:flex;flex-direction:column;justify-content:flex-end;gap:14px;padding:60px 26px 24px;border-radius:16px;border:1px solid var(--line-strong);
   background:var(--panel);opacity:0;pointer-events:none;transform:translateX(-30%) rotate(-4deg);
   transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .4s,box-shadow .4s,border-color .4s}
-.case-btn[data-pos="0"]{opacity:1;pointer-events:auto;transform:none;border-color:var(--accent);z-index:3;
-  box-shadow:0 0 0 1px rgba(65,195,238,.3),0 0 46px rgba(65,195,238,.22),inset 0 0 34px rgba(65,195,238,.05)}
-.case-btn[data-pos="1"]{opacity:.7;z-index:2;border-color:rgba(65,195,238,.35);transform:translate(18px,-18px) scale(.96)}
-.case-btn[data-pos="2"]{opacity:.4;z-index:1;border-color:rgba(65,195,238,.2);transform:translate(36px,-36px) scale(.92)}
-.case-btn[data-pos="far"]{transform:translate(40px,-40px) scale(.9)}
+.case-btn[data-pos="0"]{opacity:1;pointer-events:auto;transform:none;border-color:var(--pc);z-index:3;box-shadow:8px 8px 0 var(--panel-2)}
+.case-btn[data-pos="1"]{opacity:.75;z-index:2;transform:translate(16px,-16px) scale(.96)}
+.case-btn[data-pos="2"]{opacity:.45;z-index:1;transform:translate(32px,-32px) scale(.92)}
+.case-btn[data-pos="far"]{transform:translate(36px,-36px) scale(.9)}
 .case-btn[data-pos="1"] > *,.case-btn[data-pos="2"] > *{visibility:hidden}
-.case-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.case-btn .bar{position:absolute;top:0;left:0;right:0;padding:11px 16px 11px 58px;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:12px;color:var(--faint)}
-.case-btn[data-pos="0"]::before{content:"";position:absolute;top:17px;left:16px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:13px 0 0 var(--line-strong),26px 0 0 var(--line-strong)}
-.case-btn .cq{font-family:var(--font-mono);font-size:13px;line-height:1.6;color:var(--accent)}
-.caret{display:inline-block;width:8px;height:15px;background:var(--accent);vertical-align:-3px;margin-left:4px;animation:blink 1.05s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
+.case-btn:focus-visible{outline:2px solid var(--pc);outline-offset:3px}
+.case-btn .ctop{position:absolute;top:22px;left:26px;right:26px;display:flex;align-items:center;gap:8px}
+.case-btn .cno{font-family:var(--font-mono);font-size:12px;color:var(--faint)}
+.case-btn .cq{font-size:14px;line-height:1.6;color:var(--muted)}
 .case-btn .t{font-size:clamp(23px,2.5vw,29px);font-weight:700;line-height:1.32;letter-spacing:-.02em;text-wrap:balance}
-.case-btn .t em{font-style:normal;color:var(--accent)}
-.case-btn .cf{border-top:1px dashed var(--line-strong);padding-top:14px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
-.case-btn .cf b{color:var(--accent);font-weight:500;margin-right:6px}
+.case-btn .t em{font-style:normal;color:var(--pc)}
+.case-btn .cf{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.case-btn .cf .cs{color:var(--pc)}
 .deck-nav{display:flex;align-items:center;gap:14px}
 .deck-nav button{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;color:var(--fg);font-size:17px;transition:border-color .2s,color .2s}
-.deck-nav button:hover{border-color:var(--accent);color:var(--accent)}
+.deck-nav button:hover{border-color:var(--pc);color:var(--pc)}
 .deck-nav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .dots{display:flex;gap:6px;align-items:center}
 .dots button{all:unset;cursor:pointer;width:7px;height:7px;border-radius:4px;background:var(--line-strong);transition:width .3s,background .3s}
-.dots button.on{width:26px;background:var(--accent)}
+.dots button.on{width:26px;background:var(--pc)}
 .dots button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .count{font-family:var(--font-mono);font-size:12px;color:var(--faint);min-width:44px;text-align:center}
 .panels{min-width:0}
 .panel{height:560px;overflow-y:auto;overscroll-behavior:contain;background:var(--panel);border:1px solid var(--line-strong);border-radius:16px;min-width:0;scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
 .panel-body{padding:clamp(20px,3vw,30px);display:flex;flex-direction:column;gap:18px}
-.p-head{display:flex;align-items:center;gap:14px}
-.avatar{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-mono);font-weight:700;font-size:13px;border:1px solid var(--line-strong);background:var(--panel-2)}
-.avatar.sb{color:var(--sb)}.avatar.ta{color:var(--ta)}
-.p-head b{display:block;font-size:16px;line-height:1.3}
-.p-head .sub{font-size:13px;color:var(--muted)}
-.q{font-family:var(--font-mono);font-size:13px;color:var(--accent)}
-.panel h3{font-size:clamp(19px,2.2vw,23px);font-weight:700;letter-spacing:-.01em;padding-bottom:18px;border-bottom:1px dashed var(--line-strong)}
-.intro{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:16px 20px;color:var(--muted);font-size:14.5px;line-height:1.85}
-.step{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:16px}
-.step-h{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-weight:500;font-size:14px}
-.step-h .n{font-size:11.5px;color:var(--accent);background:var(--accent-soft);border:1px solid var(--line-strong);padding:1px 7px;border-radius:5px}
-.step ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14.5px}
-.step li{position:relative;padding-left:16px}
-.step li::before{content:"";position:absolute;left:0;top:.74em;width:6px;height:6px;background:var(--accent)}
-.learn{color:var(--muted);font-size:14.5px;padding-top:4px}
-.learn::before{content:"// ";font-family:var(--font-mono);color:var(--accent)}
+.pr-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pr-no{font-family:var(--font-mono);font-size:12.5px;color:var(--faint)}
+.pr-skill{font-size:12.5px;color:var(--pc)}
+.panel h3{font-size:clamp(19px,2.2vw,23px);font-weight:700;letter-spacing:-.01em}
+.ask{display:flex;gap:10px;align-items:baseline;font-size:15px}
+.ask b{flex:none;font-size:12px;font-weight:500;color:var(--faint);border:1px solid var(--line-strong);border-radius:6px;padding:0 7px}
+.diff{display:flex;flex-direction:column;gap:6px}
+.ln{display:flex;gap:12px;align-items:baseline;padding:9px 14px;border-radius:10px;font-size:14px;line-height:1.65}
+.ln-k{flex:none;font-size:12px;font-weight:600}
+.ln.bf{background:rgba(255,120,120,.07);border:1px solid rgba(255,120,120,.18)}
+.ln.bf .ln-k{color:#ff9a9a}
+.ln.af{background:rgba(95,211,166,.08);border:1px solid rgba(95,211,166,.22)}
+.ln.af .ln-k{color:var(--ta)}
+.intro{color:var(--muted);font-size:14.5px;line-height:1.85}
+.blk{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.blk-h{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14.5px}
+.who{display:inline-grid;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:6px;font-size:11.5px;font-weight:600;font-family:var(--font-mono)}
+.who.ai{color:var(--muted);background:var(--panel-2);border:1px solid var(--line-strong)}
+.who.me{color:var(--accent-ink);background:var(--pc,var(--accent))}
+.legend .who.me{background:var(--accent)}
+.commits{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14.5px;color:var(--muted)}
+.commits li{position:relative;padding-left:16px}
+.commits li::before{content:"";position:absolute;left:3px;top:.55em;width:5px;height:5px;border-radius:50%;border:1px solid var(--faint)}
+.reviews{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:14.5px}
+.rv{display:flex;gap:10px;align-items:baseline;padding:10px 14px;border-left:3px solid var(--line-strong);background:var(--panel-2);border-radius:0}
+.rv.ok{border-left-color:var(--pc,var(--accent))}
+.rv.dr{border-left-color:#e8c169}
+.rv.rj{border-left-color:#ff8a8a}
+.rv-t{flex:none;font-size:12px;font-weight:600;padding:0 7px;border-radius:6px;border:1px solid currentColor}
+.rv-t.ok,.rv.ok .rv-t{color:var(--accent)}
+.rv.ok .rv-t{color:var(--pc,var(--accent))}
+.rv-t.dr,.rv.dr .rv-t{color:#e8c169}
+.rv-t.rj,.rv.rj .rv-t{color:#ff8a8a}
+.blk > ul:not(.commits):not(.reviews){list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14.5px}
+.blk > ul:not(.commits):not(.reviews) li{position:relative;padding-left:16px}
+.blk > ul:not(.commits):not(.reviews) li::before{content:"";position:absolute;left:0;top:.74em;width:6px;height:6px;background:var(--pc,var(--accent))}
+.learn{color:var(--muted);font-size:14.5px;border-top:1px dashed var(--line-strong);padding-top:14px}
 .learn b{color:var(--fg);font-weight:600}
 .tbl-wrap{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
 th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--faint)}
-td:first-child{font-family:var(--font-mono);color:var(--accent);white-space:nowrap}
+td:first-child{font-family:var(--font-mono);color:var(--pc,var(--accent));white-space:nowrap}
 
 /* AI 이전 기본기 */
 .base{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
@@ -159,6 +187,7 @@ td:first-child{font-family:var(--font-mono);color:var(--accent);white-space:nowr
 footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--faint)}
 
 @media (max-width:860px){
+  .proj-sec{padding-left:14px}
   .cases{grid-template-columns:minmax(0,1fr)}
   .case-list{height:420px}
   .case-btn{height:370px}
@@ -178,20 +207,18 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 <body>
 <div class="wrap">
 
-<header class="term hero">
-  <div class="term-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">portfolio.sh</span></div>
-  <div class="term-body">
-    <p class="prompt"><b>~$</b> whoami</p>
-    <p class="mono" style="color:var(--muted);font-size:14px">오재영 · Unity 클라이언트 개발자</p>
+<header class="hero">
+    <p class="who-line">오재영 · Unity 클라이언트 개발자</p>
     <h1>AI와 함께 만들고,<br><em>판단은 직접</em> 합니다</h1>
-    <p class="lead">스노우파이프에서 모바일 게임 클라이언트를 만들고 있습니다. 2026년 4월부터 3개월 동안 <strong>AI 코딩 에이전트와 캐주얼 게임 Slime Busters를 출시까지</strong> 만들었고, 그때 정한 작업 방식을 원래 맡고 있던 TA 프로젝트에도 규칙으로 옮겼습니다. 사례마다 AI에게 맡긴 일과 제가 판단한 일을 나눠 적었습니다.</p>
-  </div>
+    <p class="lead">스노우파이프에서 모바일 게임 클라이언트를 만들고 있습니다. 2026년 4월부터 3개월 동안 <strong>AI 코딩 에이전트와 캐주얼 게임 Slime Busters를 출시까지</strong> 만들었고, 그때 정한 작업 방식을 원래 맡고 있던 위치 기반 AR 게임(사내 코드명 TA)에도 규칙으로 옮겼습니다. 사례마다 AI에게 맡긴 일과 제가 판단한 일을 나눠 적었습니다.</p>
+    <nav class="toc" aria-label="읽는 순서"><p class="toc-h">읽는 순서</p><ol><li><a href="#s-career"><span class="part">PART 1</span><b>이력</b><span class="desc">어떤 사람인지, 어디서 무엇을 했는지</span></a></li><li><a href="#s-skills"><span class="part">PART 1</span><b>역량 요약</b><span class="desc">평가 역량 3가지가 어느 사례에서 보이는지</span></a></li><li><a href="#s-sb"><span class="part">PART 2</span><b>Slime Busters</b><span class="desc">AI 코딩 에이전트와 만든 게임에서 역할을 어떻게 나눴는지</span></a></li><li><a href="#s-ta"><span class="part">PART 2</span><b>TA 프로젝트</b><span class="desc">AI 없이 쌓은 기본기와, 기존 코드에 AI를 들인 방식</span></a></li><li><a href="#s-role"><span class="part">PART 3</span><b>일하는 방식</b><span class="desc">지금 제가 하는 일과 AI에게 맡기는 일</span></a></li></ol></nav>
 </header>
 
 <section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-career">
   <div class="sec-head">
-    <span class="eyebrow">// 00 career</span>
+    <span class="eyebrow">PART 1 · 소개</span>
     <h2 id="s-career">이력</h2>
+    <p class="role-line"><b>이 구간</b>어떤 사람인지, 어디서 무엇을 했는지</p>
   </div>
   <div class="career">
     <div class="card">
@@ -215,8 +242,9 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 
 <section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-skills">
   <div class="sec-head">
-    <span class="eyebrow">// 01 summary</span>
+    <span class="eyebrow">PART 1 · 소개</span>
     <h2 id="s-skills">세 가지 역량이 드러나는 사례</h2>
+    <p class="role-line"><b>이 구간</b>평가 역량 3가지가 어느 사례에서 보이는지</p>
     <p>사례 제목을 누르면 해당 사례 카드로 이동합니다.</p>
   </div>
   <div class="skills">
@@ -251,10 +279,11 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 </section>
 
 <!-- ===================== Slime Busters ===================== -->
-<section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-sb">
+<section class="proj-sec" data-proj="sb" style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-sb">
   <div class="sec-head">
-    <span class="eyebrow">// 02 slime-busters</span>
+    <span class="eyebrow">PART 2 · 프로젝트 01</span>
     <h2 id="s-sb">Slime Busters: AI와 3개월, 출시까지</h2>
+    <p class="role-line"><b>이 구간</b>AI 코딩 에이전트와 만든 게임에서 역할을 어떻게 나눴는지</p>
     <p>절벽에서 굴러오는 슬라임을 테니스처럼 받아쳐 터뜨리는 세로형 모바일 캐주얼 액션 게임입니다. 제가 맡은 클라이언트 코드는 AI 코딩 에이전트와 함께 작성했습니다.</p>
   </div>
 
@@ -281,6 +310,8 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
     </div>
   </div>
 
+  <p class="legend">사례마다 <span class="who ai">AI</span> AI가 한 일과 <span class="who me">나</span> 제가 검토하고 정한 것을 나눠 적었습니다. 제가 정한 것은 <span class="rv-t ok">결정</span> <span class="rv-t dr">지시</span> <span class="rv-t rj">거절</span>로 구분했습니다.</p>
+
   <div class="cases" data-group="sb">
     <div class="deck">
     <div class="case-list" role="tablist" aria-label="Slime Busters 사례">
@@ -296,88 +327,94 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
     <div class="panels">
       <article class="panel" id="sb-input" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar sb">SB</span><div><b>Slime Busters</b><span class="sub">case-01 · 구조화</span></div></div>
-          <p class="q">&gt; Q. 조작 방식이 계속 바뀌어도 게임 코드는 그대로 둘 수 있을까?</p>
+          <div class="pr-top"><span class="tag sb">SB</span><span class="pr-no">case-01</span><span class="pr-skill">구조화</span></div>
           <h3>입력은 클래스 대신 조립으로</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">조작 방식이 계속 바뀌어도 게임 코드는 그대로 둘 수 있을까?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>조작안마다 클래스가 따로 있어, 버튼 배치만 바꿔도 캐릭터 쪽 게임 코드까지 고쳐야 했음</span></div><div class="ln af"><span class="ln-k">후</span><span>조작안은 설정 데이터와 입력 부품의 조합. 있는 부품으로 되는 조작안은 데이터만 추가</span></div></div>
           <div class="intro"><p>기획 단계에서 조작안이 여러 번 바뀌고 종류도 늘었습니다. 그런데 조작안마다 클래스를 두는 구조라, 버튼 배치 하나만 바꿔도 아바타 쪽 게임 코드까지 고쳐야 했습니다. 그래서 자주 바뀌는 쪽은 "입력 조합", 바뀌면 안 되는 쪽은 "아바타가 받는 입력"으로 먼저 나눴습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>기존 조작안 클래스 구조 조사</li><li>입력 모듈과 위젯 생성 코드 초안</li><li>재조립할 때 남는 이벤트 구독 점검</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>조작안 클래스를 없애고 "프로필 데이터 + 모듈 조립"으로 바꾸는 방향</li><li>아바타가 아는 범위를 입력 인터페이스 하나로 제한</li><li>차지 진행 상태는 모듈 밖에 두기</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>기존 조작안 클래스 구조 조사</li><li>입력 모듈과 위젯 생성 코드 초안</li><li>재조립할 때 남는 이벤트 구독 점검</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>조작안 클래스를 없애고 "프로필 데이터 + 모듈 조립"으로 바꾸는 방향</span></li><li class="rv ok"><span class="rv-t">결정</span><span>아바타가 아는 범위를 입력 인터페이스 하나로 제한</span></li><li class="rv ok"><span class="rv-t">결정</span><span>힘을 모으는 공격(차지)의 진행 상태는 모듈 밖에 두기</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
             <ul><li>기존 조작안 4종을 클래스 분기 없이 프로필 조합으로 표현합니다. 있는 위젯을 조합해 만들 수 있는 조작안이라면 데이터만 추가하면 됩니다.</li><li>플레이 중 조작안을 바꿔도 쌓아 둔 차지가 사라지지 않고, 일시정지 뒤에 남아 있던 조이스틱 입력도 초기화됩니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 경계를 정한 다음 AI에게 맡기니 초안이 그 경계 안에서 나왔고, 고칠 일도 줄었습니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 경계를 정한 다음 AI에게 맡기니 초안이 그 경계 안에서 나왔고, 고칠 일도 줄었습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="sb-skill" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar sb">SB</span><div><b>Slime Busters</b><span class="sub">case-02 · 구조화 · 직무 경계</span></div></div>
-          <p class="q">&gt; Q. "서브는 관통, 랠리는 바운스" 같은 요구를 케이스 코드 없이 받으려면?</p>
+          <div class="pr-top"><span class="tag sb">SB</span><span class="pr-no">case-02</span><span class="pr-skill">구조화 · 직무 경계</span></div>
           <h3>아이템과 슬라임이 함께 쓰는 스킬, 기획자가 그리는 범위</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">"서브는 관통, 랠리는 바운스" 같은 요구를 케이스 코드 없이 받으려면?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>기획 요구가 올 때마다 그 경우만 처리하는 코드를 새로 추가</span></div><div class="ln af"><span class="ln-k">후</span><span>아이템과 슬라임이 같은 스킬을 함께 쓰고, 범위·발동 시각·효과음은 데이터로 조정</span></div></div>
           <div class="intro"><p>기획에서는 컨셉과 요구를 받았고, 비슷한 효과가 아이템과 슬라임에 따로 붙을 예정이었습니다. 스킬 범위와 발동 타이밍도 밸런스를 조정할 때마다 바뀌었습니다. 요구가 올 때마다 케이스를 코드로 넣으면 같은 로직이 계속 늘어날 상황이었습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>효과별 스킬 구현</li><li>인스펙터에 그리드를 그리는 편집기 초안</li><li>기획자용 사용법 문서 초안</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>아이템과 슬라임이 같은 스킬 자산을 참조하는 공용 구조로 일반화</li><li>발동형과 지속형으로 역할 분리</li><li>데이터로 뺄 항목: 범위, 그룹별 발동 시각, 효과음</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>효과별 스킬 구현</li><li>인스펙터에 그리드를 그리는 편집기 초안</li><li>기획자용 사용법 문서 초안</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>아이템과 슬라임이 같은 스킬 자산을 참조하는 공용 구조로 일반화</span></li><li class="rv ok"><span class="rv-t">결정</span><span>발동형과 지속형으로 역할 분리</span></li><li class="rv ok"><span class="rv-t">결정</span><span>데이터로 뺄 항목: 범위, 그룹별 발동 시각, 효과음</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
             <ul><li>기획자가 인스펙터에서 셀을 눌러 범위와 발동 순서, 효과음을 바로 조정합니다.</li><li>"관통/바운스" 요구는 차지 스킬에 효과를 붙이는 방식으로 풀었고, 폭발·속도 같은 효과도 같은 틀에 붙여 추가합니다.</li><li>새 종류의 행동은 여전히 코드가 필요하다는 한계도 문서에 함께 적었습니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 기획자가 직접 만질 수 있는 지점까지 만들어 두는 것도 프로그래머의 일이라고 이 작업에서 정리했습니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 기획자가 직접 만질 수 있는 지점까지 만들어 두는 것도 프로그래머의 일이라고 이 작업에서 정리했습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="sb-tools" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar sb">SB</span><div><b>Slime Busters</b><span class="sub">case-03 · AI 리더십</span></div></div>
-          <p class="q">&gt; Q. 비개발자가 설명 없이 슬라임 하나를 끝까지 만들 수 있을까?</p>
+          <div class="pr-top"><span class="tag sb">SB</span><span class="pr-no">case-03</span><span class="pr-skill">AI 리더십</span></div>
           <h3>콘텐츠 관계를 그래프로 편집하는 에디터 툴</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">비개발자가 설명 없이 슬라임 하나를 끝까지 만들 수 있을까?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>슬라임 하나를 만들려면 데이터 파일 여러 개를 열어 손으로 연결</span></div><div class="ln af"><span class="ln-k">후</span><span>편집 화면 하나에서 능력치, 단계, 스킬, 이동 패턴까지 연결</span></div></div>
           <div class="intro"><p>슬라임, 페이즈, 스킬, 이동 패턴, 아이템, 스테이지가 여러 데이터 에셋의 참조로 이어져 있었습니다. 슬라임 하나를 만들려면 에셋 여러 개를 열고 손으로 연결해야 했고, 빠진 연결은 플레이해 봐야 드러났습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>노드 그래프 편집 화면 구현</li><li>그래프 변경과 실제 데이터의 양방향 동기화</li><li>드래그 앤 드롭 할당, 폴더 라이브러리</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>"툴 하나 안에서 슬라임 설정이 끝난다"는 목표</li><li>UX 우선순위를 정하고 제안마다 이 기준으로 선택</li><li>단계마다 직접 써 보고 불편한 점 짚기</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>노드 그래프 편집 화면 구현</li><li>그래프 변경과 실제 데이터의 양방향 동기화</li><li>드래그 앤 드롭 할당, 폴더 라이브러리</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>"툴 하나 안에서 슬라임 설정이 끝난다"는 목표</span></li><li class="rv ok"><span class="rv-t">결정</span><span>UX 우선순위를 정하고 제안마다 이 기준으로 선택</span></li><li class="rv ok"><span class="rv-t">결정</span><span>단계마다 직접 써 보고 불편한 점 짚기</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
             <ul><li>작성 탭 하나에서 스탯, 페이즈, 스킬, 이동 패턴까지 연결합니다. 스테이지·풀·아이템도 탭으로 묶었습니다.</li><li>기존 데이터 구조를 그대로 두고 그 위에 편집 화면을 얹어, 런타임 코드는 건드리지 않았습니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 고르는 기준을 문장으로 적어 두니 AI가 안을 여러 개 내도 금방 고를 수 있었습니다. 기준이 없을 때는 그럴듯한 제안을 그대로 따라가기 쉬웠습니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 고르는 기준을 문장으로 적어 두니 AI가 안을 여러 개 내도 금방 고를 수 있었습니다. 기준이 없을 때는 그럴듯한 제안을 그대로 따라가기 쉬웠습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="sb-ads" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar sb">SB</span><div><b>Slime Busters</b><span class="sub">case-04 · 학습 실행력</span></div></div>
-          <p class="q">&gt; Q. 광고를 보고 나면 게임이 꼬이는데 원인 후보가 너무 많다면, 무엇부터 봐야 할까?</p>
+          <div class="pr-top"><span class="tag sb">SB</span><span class="pr-no">case-04</span><span class="pr-skill">학습 실행력</span></div>
           <h3>광고 콜백과 기기 메모리, 측정부터</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">광고를 보고 나면 게임이 꼬이는데 원인 후보가 너무 많다면, 무엇부터 봐야 할까?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>광고 종료 알림, 앱 복귀, 메모리 부족 알림이 엇갈려 입력 잠금·보상·다음 광고 준비가 꼬임</span></div><div class="ln af"><span class="ln-k">후</span><span>광고 중 메모리 부족은 광고가 닫힌 뒤 처리하고, 늦게 도착한 이전 알림은 무시</span></div></div>
           <div class="intro"><p>저사양 기기에서 광고 SDK 콜백, 앱 포커스 복귀, OS 저메모리 알림이 제각각 다른 시점에 들어오면서 입력 잠금, 보상 지급, 다음 광고 준비가 서로 꼬였습니다. 원인 후보가 많아서, 추측으로 고치기 전에 무엇이 메모리를 쓰는지부터 측정하기로 했습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>콜백과 생명주기 이벤트의 순서 정리</li><li>광고 네트워크별 메모리 계측 코드</li><li>요청 버전으로 늦게 온 콜백을 구분하는 초안</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>실기기 측정값으로 차단 기준을 정하고 조정</li><li>효과가 없거나 부작용이 있던 방식은 되돌리기</li><li>"광고 표시 중에는 해제하지 않는다" 원칙</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>콜백과 생명주기 이벤트의 순서 정리</li><li>광고 네트워크별 메모리 계측 코드</li><li>요청 버전으로 늦게 온 콜백을 구분하는 초안</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>실기기 측정값으로 차단 기준을 정하고 조정</span></li><li class="rv rj"><span class="rv-t">거절</span><span>효과가 없거나 부작용이 있던 방식은 되돌리기</span></li><li class="rv ok"><span class="rv-t">결정</span><span>"광고 표시 중에는 해제하지 않는다" 원칙</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
             <ul><li>광고가 떠 있을 때 저메모리 알림이 오면 광고가 닫힌 뒤에 정리하고, 메모리가 안정되면 다음 광고를 다시 준비합니다.</li><li>이전 요청에서 늦게 도착한 콜백이 새 광고 흐름을 건드리지 않습니다.</li><li>광고를 끝까지 보지 않은 경우와 광고를 볼 수 없는 경우를 나눠, 각각에 맞는 안내를 띄웁니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 처음 다루는 영역이라 AI의 설명보다 측정값을 먼저 믿었습니다. 계측부터 붙이고, 측정값을 보며 기준을 조정해 가는 순서를 이때 익혔습니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 처음 다루는 영역이라 AI의 설명보다 측정값을 먼저 믿었습니다. 계측부터 붙이고, 측정값을 보며 기준을 조정해 가는 순서를 이때 익혔습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="sb-perf" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar sb">SB</span><div><b>Slime Busters</b><span class="sub">case-05 · 학습 실행력</span></div></div>
-          <p class="q">&gt; Q. 프레임이 흔들리고 슬라임이 겹친다면, 원인을 어떻게 나눠 볼까?</p>
+          <div class="pr-top"><span class="tag sb">SB</span><span class="pr-no">case-05</span><span class="pr-skill">학습 실행력</span></div>
           <h3>할당 지점은 하나씩, 겹침은 순서 문제로</h3>
-          <div class="intro"><p>문제는 두 가지였습니다. 그리드 이동 틱마다 임시 컬렉션, 람다, 이동 모션 객체가 새로 만들어졌고, 이동 속도가 다른 슬라임이 한 칸에 쌓이면 위치가 겹쳤습니다. 겹침의 원인은 속도 차이보다, 같은 틱 안의 이동 순서에 따라 스택 구성이 달라지는 데 있었습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>반복 경로의 할당 지점 후보 찾기</li><li>버퍼와 캐시 재사용 코드</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>할당 지점을 종류별로 나눠 하나씩 제거하고 각각 따로 커밋</li><li>겹침 원인이 틱 안의 이동 순서임을 확인</li><li>스택 정리를 틱 끝으로 미루는 처리 순서</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
-            <ul><li>그리드 반복 컬렉션, 애니메이션 람다, 모션 객체, 슬라임 생성 경로의 임시 할당을 지점별로 없앴습니다.</li><li>스택에 합류한 빠른 슬라임도 정해진 칸 수만큼 이동합니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 한꺼번에 고치면 어떤 수정이 효과였는지 알 수 없습니다. 원인 하나에 커밋 하나씩 나눠 두면 되돌릴 때도 그 커밋만 되돌리면 됩니다.</p>
+          <p class="ask"><b>문제</b><span class="ask-t">프레임이 흔들리고 슬라임이 겹친다면, 원인을 어떻게 나눠 볼까?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>이동할 때마다 임시 객체가 새로 생기고, 한 칸에 모인 슬라임 위치가 겹침</span></div><div class="ln af"><span class="ln-k">후</span><span>임시 객체를 생기는 곳마다 없애고, 겹침 정리는 이동이 모두 끝난 뒤에 처리</span></div></div>
+          <div class="intro"><p>문제는 두 가지였습니다. 그리드 이동 틱마다 임시 컬렉션, 람다, 이동 모션 객체가 새로 만들어졌고, 이동 속도가 다른 슬라임이 한 칸에 쌓이면 위치가 겹쳤습니다. 겹침의 원인은 속도 차이보다, 같은 틱 안의 이동 순서에 따라 한 칸에 모이는 슬라임 묶음이 달라지는 데 있었습니다.</p></div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>반복 경로의 할당 지점 후보 찾기</li><li>버퍼와 캐시 재사용 코드</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>할당 지점을 종류별로 나눠 하나씩 제거하고 각각 따로 커밋</span></li><li class="rv ok"><span class="rv-t">결정</span><span>겹침 원인이 틱 안의 이동 순서임을 확인</span></li><li class="rv ok"><span class="rv-t">결정</span><span>칸마다 모인 슬라임 정리를 틱 끝으로 미루는 처리 순서</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
+            <ul><li>그리드 반복 컬렉션, 애니메이션 람다, 모션 객체, 슬라임 생성 경로의 임시 할당을 지점별로 없앴습니다.</li><li>다른 슬라임 위에 합류한 빠른 슬라임도 정해진 칸 수만큼 이동합니다.</li></ul>
           </div>
+          <p class="learn"><b>돌아보며.</b> 한꺼번에 고치면 어떤 수정이 효과였는지 알 수 없습니다. 원인 하나에 커밋 하나씩 나눠 두면 되돌릴 때도 그 커밋만 되돌리면 됩니다.</p>
         </div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ===================== 라이브 프로젝트 ===================== -->
-<section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-ta">
+<!-- ===================== TA 프로젝트 ===================== -->
+<section class="proj-sec" data-proj="ta" style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-ta">
   <div class="sec-head">
-    <span class="eyebrow">// 03 ta-project</span>
+    <span class="eyebrow">PART 2 · 프로젝트 02</span>
     <h2 id="s-ta">TA 프로젝트: AI 없이 쌓은 기본기와 AI를 들인 방식</h2>
-    <p>스노우파이프에서 개발 중인 위치 기반 AR 모바일 게임입니다. 공개 전 프로젝트라 화면과 코드는 넣지 않고, 구조와 과정만 적었습니다.</p>
+    <p class="role-line"><b>이 구간</b>AI 없이 쌓은 기본기와, 기존 코드에 AI를 들인 방식</p>
+    <p>스노우파이프에서 개발 중인 위치 기반 AR 모바일 게임입니다. TA는 사내 코드명입니다. 공개 전 프로젝트라 화면과 코드는 넣지 않고, 구조와 과정만 적었습니다.</p>
   </div>
 
   <div class="proj">
@@ -418,58 +455,62 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
     <div class="panels">
       <article class="panel" id="ta-bundle" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar ta">TA</span><div><b>TA 프로젝트</b><span class="sub">case-06 · 학습 실행력</span></div></div>
-          <p class="q">&gt; Q. 에셋 번들을 매번 다시 받는 이유를 추측 없이 찾으려면?</p>
+          <div class="pr-top"><span class="tag ta">TA</span><span class="pr-no">case-06</span><span class="pr-skill">학습 실행력</span></div>
           <h3>TA에서 AI와 한 첫 작업, 실측부터</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">에셋 번들을 매번 다시 받는 이유를 추측 없이 찾으려면?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>게임 시작 때 리소스 묶음을 전부 받고, 에디터에서는 실행할 때마다 다시 받음</span></div><div class="ln af"><span class="ln-k">후</span><span>필요할 때 필요한 것만 받고, 전투 리소스는 전투에 들어갈 때 받음</span></div></div>
           <div class="intro"><p>수백 개, 수 GB 규모의 번들을 인트로에서 전부 받고 있었고, 에디터에서는 실행할 때마다 다시 받았습니다. 요청 단위로 바꾸려면, 지금까지 문제없이 돌아간 이유가 "전부 미리 받아 두기 때문"인지부터 확인해야 했습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>매니페스트와 캐시 폴더 실측</li><li>번들 의존 관계를 뽑아 주는 에디터 도구</li><li>요청 단위 로드 코드 초안</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>원인을 정하기 전에 실측부터 하도록 지시</li><li>공용 네트워크 계층을 건드리지 않는 안을 고르고, 계층을 바꾸는 안은 거절</li><li>지연 다운로드는 전투부터 적용하는 범위</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>매니페스트와 캐시 폴더 실측</li><li>번들 의존 관계를 뽑아 주는 에디터 도구</li><li>요청 단위 로드 코드 초안</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv dr"><span class="rv-t">지시</span><span>원인을 정하기 전에 실측부터 하도록 지시</span></li><li class="rv rj"><span class="rv-t">거절</span><span>공용 네트워크 계층을 건드리지 않는 안을 고르고, 계층을 바꾸는 안은 거절</span></li><li class="rv ok"><span class="rv-t">결정</span><span>지연 다운로드는 전투부터 적용하는 범위</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
             <ul><li>실측해 보니 런타임에서 의존성을 처리하는 코드가 없었고, 작은 번들 하나가 몇 배 크기를 끌고 오는 의존 오염과 순환 참조도 있었습니다.</li><li>캐시가 수 GB까지 불어 한도를 넘으면 지워지고 다시 받는 루프도 확인했습니다.</li><li>이후 요청 단위 로드와 전투 진입 시 지연 다운로드까지 만들어 동작을 확인했습니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 작업을 마치고 30분 동안 회고하며 "단정 전에 증거", "실험 지시는 최소한으로", "데이터 구조는 최소형으로" 체크리스트를 만들었습니다. 이후 작업 규칙의 출발점이 됐습니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 작업을 마치고 30분 동안 회고하며 "단정 전에 증거", "실험 지시는 최소한으로", "데이터 구조는 최소형으로" 체크리스트를 만들었습니다. 이후 작업 규칙의 출발점이 됐습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="ta-lobby" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar ta">TA</span><div><b>TA 프로젝트</b><span class="sub">case-07 · AI 리더십</span></div></div>
-          <p class="q">&gt; Q. AI가 코드 한 곳만 보고 원인을 단정하면, 어디서 멈춰야 할까?</p>
+          <div class="pr-top"><span class="tag ta">TA</span><span class="pr-no">case-07</span><span class="pr-skill">AI 리더십</span></div>
           <h3>관측과 해석이 어긋나면 해석부터 의심하기</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">AI가 코드 한 곳만 보고 원인을 단정하면, 어디서 멈춰야 할까?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>AI가 코드 한 곳만 보고 원인을 단정</span></div><div class="ln af"><span class="ln-k">후</span><span>제가 본 현상과 어긋나면 다시 확인. 실제 원인은 테이블 데이터였음</span></div></div>
           <div class="intro"><p>로비 연출을 개편하던 중이었습니다. 일부 화면에서는 연출이 나오지 않았고, 보상을 연속으로 받으면 앞 구간의 경험치 연출이 사라졌습니다. 다이얼로그를 열었다 돌아오면 UI가 잠기는 문제도 있었습니다. AI가 원인을 추적하는 과정에서 코드 한 곳만 보고 단정한 경우가 세 번 있었습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>호출 흐름을 끝까지 추적</li><li>임시 스택 로그를 넣어 경로 확인</li><li>처방 코드 초안</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>재현 조건 확인과 기획 의도 대조</li><li>제 관측과 어긋난 단정의 재확인 지시 (실제 원인은 테이블 데이터)</li><li>AI가 기획 의도를 결함으로 보고 고친 것 두 번을 되돌리고, 의도를 메모리에 고정</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
-            <ul><li>서버 값과 화면에 보여 준 값을 따로 두고, 연출로 보여 준 만큼만 화면에 반영합니다.</li><li>긴급 통화 판정과 표현을 분리하고, 같은 연출이 두 번 예약되어 대기열이 잠기던 문제를 고쳤습니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 그 뒤로 관측과 해석이 어긋나면 해석부터 의심하고, 수치 문제는 테이블까지 확인하게 했습니다.</p>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>호출 흐름을 끝까지 추적</li><li>임시 스택 로그를 넣어 경로 확인</li><li>처방 코드 초안</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>재현 조건 확인과 기획 의도 대조</span></li><li class="rv dr"><span class="rv-t">지시</span><span>제 관측과 어긋난 단정의 재확인 지시 (실제 원인은 테이블 데이터)</span></li><li class="rv rj"><span class="rv-t">거절</span><span>AI가 기획 의도를 결함으로 보고 고친 것 두 번을 되돌리고, 의도를 메모리에 고정</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
+            <ul><li>서버 값과 화면에 보여 준 값을 따로 두고, 연출로 보여 준 만큼만 화면에 반영합니다.</li><li>특정 연출(전화가 걸려 오는 이벤트)을 띄울지 정하는 코드와 화면에 보여 주는 코드를 나누고, 같은 연출이 두 번 예약되어 대기열이 잠기던 문제를 고쳤습니다.</li></ul>
           </div>
+          <p class="learn"><b>돌아보며.</b> 그 뒤로 관측과 해석이 어긋나면 해석부터 의심하고, 수치 문제는 테이블까지 확인하게 했습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="ta-skilltab" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar ta">TA</span><div><b>TA 프로젝트</b><span class="sub">case-08 · 구조화</span></div></div>
-          <p class="q">&gt; Q. 큰 기획서를 받으면 코드보다 먼저 무엇을 해야 할까?</p>
+          <div class="pr-top"><span class="tag ta">TA</span><span class="pr-no">case-08</span><span class="pr-skill">구조화</span></div>
           <h3>코드보다 상태표와 질문을 먼저</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">큰 기획서를 받으면 코드보다 먼저 무엇을 해야 할까?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>17장짜리 기획서를 바로 코드로 옮기기엔 요구가 많음</span></div><div class="ln af"><span class="ln-k">후</span><span>기획서와 현재 코드의 비교표, 일감 7개, 기획 확인 질문 7개를 먼저 정리</span></div></div>
           <div class="intro"><p>별도 팝업이던 스킬 편집을 캐릭터 상세 화면의 탭으로 옮기는 기획서였고, 분량은 17장이었습니다. 잠금 스킬 표시, 탭을 벗어나기 전 저장 확인, 칸형 코스트 게이지, 강화 전후 표시까지 요구가 많아 바로 코드부터 쓰기엔 위험했습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>기획서와 현재 코드를 대조한 상태표</li><li>합의한 조각 단위의 코드 초안</li><li>화면 경로 · 동작 · 기대 결과로 된 테스트 목록</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>일감 A~G로 나누고 기획 확인 질문 7개를 착수 전에 전달</li><li>앞서 만든 파워칩 화면의 "이탈 전 저장" 흐름을 재사용</li><li>실기기 검수와 커밋 단위 확정</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>결과</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>기획서와 현재 코드를 대조한 상태표</li><li>합의한 조각 단위의 코드 초안</li><li>화면 경로 · 동작 · 기대 결과로 된 테스트 목록</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>일감 7개로 나누고 기획 확인 질문 7개를 착수 전에 전달</span></li><li class="rv ok"><span class="rv-t">결정</span><span>앞서 만든 장비 편집 화면의 "나가기 전에 저장할지 묻기" 흐름을 재사용</span></li><li class="rv ok"><span class="rv-t">결정</span><span>실기기 검수와 커밋 단위 확정</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과</div>
             <ul><li>7일 동안 37커밋으로 탭 안 편집을 완성했습니다.</li><li>검수 흐름도 이때 자리 잡았습니다. AI가 만든 테스트 목록으로 제가 실기기 검수를 하며 실패한 항목만 짚고, 실패는 원인별로 분류해 고친 뒤 수정은 원래 커밋에 합쳐 이력을 정리합니다.</li></ul>
-            <p class="learn"><b>배운 점.</b> 질문을 먼저 보내 두니 구현 도중에 기획이 바뀌는 일이 줄었습니다. 방향이 틀리면 AI는 그 방향으로도 빠르게 가기 때문에, 착수 전에 맞춰 두는 것이 가장 확실했습니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 질문을 먼저 보내 두니 구현 도중에 기획이 바뀌는 일이 줄었습니다. 방향이 틀리면 AI는 그 방향으로도 빠르게 가기 때문에, 착수 전에 맞춰 두는 것이 가장 확실했습니다.</p>
         </div>
       </article>
 
       <article class="panel" id="ta-failure" role="tabpanel">
         <div class="panel-body">
-          <div class="p-head"><span class="avatar ta">TA</span><div><b>TA 프로젝트</b><span class="sub">case-09 · AI 리더십 · 학습 실행력</span></div></div>
-          <p class="q">&gt; Q. 세션이 바뀌어도 AI가 같은 실수를 반복하지 않게 하려면?</p>
+          <div class="pr-top"><span class="tag ta">TA</span><span class="pr-no">case-09</span><span class="pr-skill">AI 리더십 · 학습 실행력</span></div>
           <h3>실패 18건을 패턴 7개로</h3>
+          <p class="ask"><b>문제</b><span class="ask-t">세션이 바뀌어도 AI가 같은 실수를 반복하지 않게 하려면?</span></p>
+          <div class="diff"><div class="ln bf"><span class="ln-k">전</span><span>세션이 바뀌면 AI가 지난 지적을 잊고 같은 실수를 반복</span></div><div class="ln af"><span class="ln-k">후</span><span>실패 18건을 패턴 7개로 묶어, 작업 시작 때마다 읽게 함</span></div></div>
           <div class="intro"><p>세션이 바뀌면 AI는 지난번 지적을 잊어서, 같은 종류의 실수가 작업마다 다시 나왔습니다. 그때그때 고치는 것만으로는 끝나지 않는 문제였습니다.</p></div>
-          <div class="step"><div class="step-h"><span class="n">01</span>AI에게 맡긴 것</div><ul><li>실패 사례 기록</li><li>원인별로 기존 패턴에 분류, 맞는 게 없을 때만 새 패턴</li><li>작업 끝에 패턴 대조 결과 보고</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">02</span>내가 판단한 것</div><ul><li>무엇이 실패인지 정하기</li><li>패턴과 막는 행동의 기준</li><li>작업 시작 때 해당 패턴을 읽고, 바뀌면 다른 세션에도 바로 전파하는 규칙</li></ul></div>
-          <div class="step"><div class="step-h"><span class="n">03</span>패턴 일부</div>
+          <div class="blk"><div class="blk-h"><span class="who ai">AI</span>AI가 한 일</div><ul class="commits"><li>실패 사례 기록</li><li>원인별로 기존 패턴에 분류, 맞는 게 없을 때만 새 패턴</li><li>작업 끝에 패턴 대조 결과 보고</li></ul></div>
+          <div class="blk"><div class="blk-h"><span class="who me">나</span>제가 검토하고 정한 것</div><ul class="reviews"><li class="rv ok"><span class="rv-t">결정</span><span>무엇이 실패인지 정하기</span></li><li class="rv ok"><span class="rv-t">결정</span><span>패턴과 막는 행동의 기준</span></li><li class="rv ok"><span class="rv-t">결정</span><span>작업 시작 때 해당 패턴을 읽고, 바뀌면 다른 세션에도 바로 전파하는 규칙</span></li></ul></div>
+          <div class="blk"><div class="blk-h">결과 · 패턴 일부</div>
             <div class="tbl-wrap"><table>
               <thead><tr><th>패턴</th><th>언제</th><th>막는 행동</th></tr></thead>
               <tbody>
@@ -479,8 +520,8 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
                 <tr><td>P7</td><td>지난 기록을 지금 사실로 씀</td><td>행동 직전에 프리팹, git log 같은 1차 출처에서 다시 확인</td></tr>
               </tbody>
             </table></div>
-            <p class="learn"><b>배운 점.</b> 컨벤션처럼 꼭 지켜야 하는 것은 매번 부탁하는 대신 규칙 파일로 남겼습니다. 다음 세션은 그 파일을 읽고 시작합니다.</p>
           </div>
+          <p class="learn"><b>돌아보며.</b> 컨벤션처럼 꼭 지켜야 하는 것은 매번 부탁하는 대신 규칙 파일로 남겼습니다. 다음 세션은 그 파일을 읽고 시작합니다.</p>
         </div>
       </article>
     </div>
@@ -489,8 +530,9 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 
 <section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-role">
   <div class="sec-head">
-    <span class="eyebrow">// 04 how-i-work</span>
+    <span class="eyebrow">PART 3 · 일하는 방식</span>
     <h2 id="s-role">제가 직접 하는 일, AI에게 맡기는 일</h2>
+    <p class="role-line"><b>이 구간</b>지금 제가 하는 일과 AI에게 맡기는 일</p>
   </div>
   <div class="roles">
     <div class="card"><h3 style="color:var(--accent)">제가 합니다</h3><ul>
@@ -526,8 +568,10 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
       var title = b.querySelector('.t').innerHTML;
       var proj = b.dataset.target.slice(0, 2).toUpperCase();
       b.setAttribute('aria-controls', b.dataset.target);
-      b.innerHTML = '<span class="bar">' + num + '.sh</span><span class="cq"></span><span class="t">' + title + '</span><span class="cf"><b>//</b>' + proj + ' · ' + skill + '</span>';
-      b.querySelector('.cq').textContent = panel.querySelector('.q').textContent;
+      var nAi = panel.querySelectorAll('.commits li').length;
+      var nMe = panel.querySelectorAll('.reviews li').length;
+      b.innerHTML = '<span class="ctop"><span class="tag ' + proj.toLowerCase() + '">' + proj + '</span><span class="cno">' + num + '</span></span><span class="cq"></span><span class="t">' + title + '</span><span class="cf"><span>AI가 한 일 ' + nAi + '</span><span>제가 정한 것 ' + nMe + '</span><span class="cs">' + skill + '</span></span>';
+      b.querySelector('.cq').textContent = panel.querySelector('.ask-t').textContent;
       var dot = document.createElement('button');
       dot.type = 'button';
       dot.setAttribute('aria-label', num + ' 보기');
@@ -542,9 +586,6 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
         b.dataset.pos = d <= 2 ? String(d) : 'far';
         b.setAttribute('aria-selected', d === 0 ? 'true' : 'false');
         b.tabIndex = d === 0 ? 0 : -1;
-        var caret = b.querySelector('.caret');
-        if (d === 0 && !caret) { b.querySelector('.cq').insertAdjacentHTML('beforeend', '<i class="caret" aria-hidden="true"></i>'); }
-        if (d !== 0 && caret) { caret.remove(); }
       });
       var id = btns[state.idx].dataset.target;
       group.querySelectorAll('.panel').forEach(function(p){ p.hidden = p.id !== id; });
