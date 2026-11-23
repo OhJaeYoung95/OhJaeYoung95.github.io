@@ -20,7 +20,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15.5px;line-height:1.75;word-break:keep-all;overflow-wrap:anywhere;
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15.5px;line-height:1.75;word-break:keep-all;overflow-wrap:anywhere;
   background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px;}
 .wrap{max-width:1120px;margin:0 auto;padding-block:40px 80px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
@@ -186,6 +186,16 @@ td:first-child{font-family:var(--font-mono);color:var(--pc,var(--accent));white-
 .closing b{color:var(--fg)}
 footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--faint)}
 
+/* 부분 구분: 장 표지처럼 크게, 프로젝트 부분은 화면 폭 배경으로 묶음 */
+.part-div{display:flex;align-items:flex-end;gap:clamp(16px,3vw,28px);padding:28px 0 22px;border-bottom:1px solid var(--line-strong);margin-bottom:-36px}
+.part-no{font-family:var(--font-mono);font-size:clamp(56px,9vw,96px);font-weight:700;line-height:.85;color:transparent;-webkit-text-stroke:1.5px #3f5b6c}
+.part-txt{display:flex;flex-direction:column;gap:4px;padding-bottom:4px}
+.part-k{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--faint)}
+.part-name{font-size:clamp(26px,3.8vw,36px);font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.part-desc{font-size:14.5px;color:var(--muted)}
+.part-band{position:relative;display:flex;flex-direction:column;gap:72px;margin-bottom:32px}
+.part-band::before{content:"";position:absolute;z-index:-1;top:-40px;bottom:-56px;left:calc(50% - 50vw);right:calc(50% - 50vw);background:#0f1a21;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
 @media (max-width:860px){
   .proj-sec{padding-left:14px}
   .cases{grid-template-columns:minmax(0,1fr)}
@@ -197,6 +207,7 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{
   body{background-image:none}
+  .part-band::before{display:none}
   .deck{display:none!important}
   .cases{grid-template-columns:1fr}
   .panel[hidden]{display:block!important}
@@ -214,9 +225,10 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
     <nav class="toc" aria-label="읽는 순서"><p class="toc-h">읽는 순서</p><ol><li><a href="#s-career"><span class="part">PART 1</span><b>이력</b><span class="desc">어떤 사람인지, 어디서 무엇을 했는지</span></a></li><li><a href="#s-skills"><span class="part">PART 1</span><b>역량 요약</b><span class="desc">평가 역량 3가지가 어느 사례에서 보이는지</span></a></li><li><a href="#s-sb"><span class="part">PART 2</span><b>Slime Busters</b><span class="desc">AI 코딩 에이전트와 만든 게임에서 역할을 어떻게 나눴는지</span></a></li><li><a href="#s-ta"><span class="part">PART 2</span><b>TA 프로젝트</b><span class="desc">AI 없이 쌓은 기본기와, 기존 코드에 AI를 들인 방식</span></a></li><li><a href="#s-role"><span class="part">PART 3</span><b>일하는 방식</b><span class="desc">지금 제가 하는 일과 AI에게 맡기는 일</span></a></li></ol></nav>
 </header>
 
+<div class="part-div" id="part-01" role="heading" aria-level="2"><span class="part-no" aria-hidden="true">01</span><div class="part-txt"><span class="part-k">PART 1</span><span class="part-name">소개</span><span class="part-desc">어떤 사람이고, 평가 역량 3가지가 어느 사례에서 보이는지</span></div></div>
+
 <section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-career">
   <div class="sec-head">
-    <span class="eyebrow">PART 1 · 소개</span>
     <h2 id="s-career">이력</h2>
     <p class="role-line"><b>이 구간</b>어떤 사람인지, 어디서 무엇을 했는지</p>
   </div>
@@ -242,7 +254,6 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 
 <section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-skills">
   <div class="sec-head">
-    <span class="eyebrow">PART 1 · 소개</span>
     <h2 id="s-skills">세 가지 역량이 드러나는 사례</h2>
     <p class="role-line"><b>이 구간</b>평가 역량 3가지가 어느 사례에서 보이는지</p>
     <p>사례 제목을 누르면 해당 사례 카드로 이동합니다.</p>
@@ -278,10 +289,12 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
   </div>
 </section>
 
+<div class="part-band">
+<div class="part-div" id="part-02" role="heading" aria-level="2"><span class="part-no" aria-hidden="true">02</span><div class="part-txt"><span class="part-k">PART 2</span><span class="part-name">프로젝트</span><span class="part-desc">두 프로젝트에서 AI와 역할을 어떻게 나눴는지, 사례 9개</span></div></div>
 <!-- ===================== Slime Busters ===================== -->
 <section class="proj-sec" data-proj="sb" style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-sb">
   <div class="sec-head">
-    <span class="eyebrow">PART 2 · 프로젝트 01</span>
+    <span class="eyebrow">프로젝트 01</span>
     <h2 id="s-sb">Slime Busters: AI와 3개월, 출시까지</h2>
     <p class="role-line"><b>이 구간</b>AI 코딩 에이전트와 만든 게임에서 역할을 어떻게 나눴는지</p>
     <p>절벽에서 굴러오는 슬라임을 테니스처럼 받아쳐 터뜨리는 세로형 모바일 캐주얼 액션 게임입니다. 제가 맡은 클라이언트 코드는 AI 코딩 에이전트와 함께 작성했습니다.</p>
@@ -411,7 +424,7 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
 <!-- ===================== TA 프로젝트 ===================== -->
 <section class="proj-sec" data-proj="ta" style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-ta">
   <div class="sec-head">
-    <span class="eyebrow">PART 2 · 프로젝트 02</span>
+    <span class="eyebrow">프로젝트 02</span>
     <h2 id="s-ta">TA 프로젝트: AI 없이 쌓은 기본기와 AI를 들인 방식</h2>
     <p class="role-line"><b>이 구간</b>AI 없이 쌓은 기본기와, 기존 코드에 AI를 들인 방식</p>
     <p>스노우파이프에서 개발 중인 위치 기반 AR 모바일 게임입니다. TA는 사내 코드명입니다. 공개 전 프로젝트라 화면과 코드는 넣지 않고, 구조와 과정만 적었습니다.</p>
@@ -528,9 +541,12 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
   </div>
 </section>
 
+</div>
+
+<div class="part-div" id="part-03" role="heading" aria-level="2"><span class="part-no" aria-hidden="true">03</span><div class="part-txt"><span class="part-k">PART 3</span><span class="part-name">일하는 방식</span><span class="part-desc">두 프로젝트를 거치며 정리한 지금의 작업 방식</span></div></div>
+
 <section style="display:flex;flex-direction:column;gap:24px" aria-labelledby="s-role">
   <div class="sec-head">
-    <span class="eyebrow">PART 3 · 일하는 방식</span>
     <h2 id="s-role">제가 직접 하는 일, AI에게 맡기는 일</h2>
     <p class="role-line"><b>이 구간</b>지금 제가 하는 일과 AI에게 맡기는 일</p>
   </div>
