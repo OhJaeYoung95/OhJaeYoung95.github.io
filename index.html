@@ -71,10 +71,10 @@ a{color:var(--accent)}
 .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
 .skill{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:12px}
 .skill h3{font-size:19px;font-weight:700}
-.skill .def{color:var(--muted);font-size:14px}
+.skill .def{text-wrap:balance;color:var(--muted);font-size:14px}
 .skill ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line-strong);padding-top:12px}
 .skill li{display:flex;gap:8px;align-items:baseline;font-size:14.5px}
-.skill li a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+.skill li a{text-wrap:balance;color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line-strong)}
 .skill li a:hover{border-color:var(--accent);color:var(--accent)}
 
 /* 프로젝트 개요 */
@@ -263,32 +263,32 @@ footer{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direc
   <div class="skills">
     <div class="skill">
       <h3>AI 리더십</h3>
-      <p class="def">AI와 제 역할을 나누고, 그 경계를 규칙으로 남겨 둡니다.</p>
+      <p class="def">AI와 제가 할 일을 나누고, 그 경계를 규칙으로 남겨 둡니다.</p>
       <ul>
-        <li><span class="tag sb">SB</span><a href="#sb-tools">고르는 기준을 먼저 정하고 AI 제안을 추린 에디터 툴</a></li>
-        <li><span class="tag ta">TA</span><a href="#ta-lobby">AI가 원인을 단정했을 때 관측으로 바로잡은 일</a></li>
-        <li><span class="tag ta">TA</span><a href="#ta-failure">실패 18건을 패턴 7개로 묶은 검수 흐름</a></li>
+        <li><span class="tag sb">SB</span><a href="#sb-tools">고르는 기준을 먼저 정하고, 그 기준으로 AI 제안을 골라 만든 에디터 툴</a></li>
+        <li><span class="tag ta">TA</span><a href="#ta-lobby">AI가 원인을 단정했을 때, 제가 본 현상을 근거로 바로잡은 일</a></li>
+        <li><span class="tag ta">TA</span><a href="#ta-failure">AI의 실패 18건을 패턴 7개로 묶어, 작업을 시작할 때마다 읽게 한 일</a></li>
       </ul>
     </div>
     <div class="skill">
       <h3>구조화</h3>
       <p class="def">자주 바뀌는 것과 바뀌면 안 되는 것을 먼저 가르고, 실행할 수 있는 단위로 나눕니다.</p>
       <ul>
-        <li><span class="tag sb">SB</span><a href="#sb-input">조작안이 바뀌어도 게임 코드는 그대로인 입력 구조</a></li>
-        <li><span class="tag sb">SB</span><a href="#sb-skill">기획 요구를 데이터로 받는 공용 스킬과 그리드 범위</a></li>
-        <li><span class="tag sb">SB</span><a href="#sb-perf">프레임 흔들림과 겹침을 원인별로 나눠 잡은 일</a></li>
+        <li><span class="tag sb">SB</span><a href="#sb-input">조작 방식이 바뀌어도 게임 코드는 그대로 두는 입력 구조</a></li>
+        <li><span class="tag sb">SB</span><a href="#sb-skill">기획 요구를 데이터 조정으로 반영하는 공용 스킬과, 기획자가 직접 그리는 스킬 범위</a></li>
+        <li><span class="tag sb">SB</span><a href="#sb-perf">프레임이 흔들리고 슬라임이 겹치는 문제를 원인별로 나눠 고친 일</a></li>
         <li><span class="tag dd">DD</span><a href="#dd-platform">크롬 확장과 데스크톱 앱을 한 코드로 만든 구조</a></li>
-        <li><span class="tag ta">TA</span><a href="#ta-skilltab">기획서 17장을 일감과 질문으로 나눈 스킬 탭</a></li>
+        <li><span class="tag ta">TA</span><a href="#ta-skilltab">17장짜리 기획서를 일감과 질문으로 나눠 시작한 스킬 탭 작업</a></li>
       </ul>
     </div>
     <div class="skill">
       <h3>학습 실행력</h3>
       <p class="def">낯선 도구와 영역은 측정과 회고로 익히고, 배운 것을 다음 작업의 규칙으로 삼습니다.</p>
       <ul>
-        <li><span class="tag sb">SB</span><a href="#s-sb">AI 코딩 에이전트를 처음 들여 작업 환경부터 만들고 출시까지 완주</a></li>
-        <li><span class="tag sb">SB</span><a href="#sb-ads">광고 SDK와 기기 메모리 문제를 측정으로 푼 일</a></li>
+        <li><span class="tag sb">SB</span><a href="#s-sb">AI 코딩 에이전트를 처음 도입해 작업 환경부터 만들고, 출시까지 마친 일</a></li>
+        <li><span class="tag sb">SB</span><a href="#sb-ads">광고 SDK와 기기 메모리 문제를 측정부터 시작해 푼 일</a></li>
         <li><span class="tag dd">DD</span><a href="#dd-chat">채팅방이 막힐 때마다 원인을 찾아 고친 일</a></li>
-        <li><span class="tag ta">TA</span><a href="#ta-bundle">TA에서 AI 에이전트와 한 첫 작업으로 만든 "단정 전에 증거" 규칙</a></li>
+        <li><span class="tag ta">TA</span><a href="#ta-bundle">TA에서 AI 에이전트와 처음 작업한 뒤 만든 "단정 전에 증거" 규칙</a></li>
       </ul>
     </div>
   </div>
